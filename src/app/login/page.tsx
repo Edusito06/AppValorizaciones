@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import toast from 'react-hot-toast';
@@ -11,13 +11,20 @@ export default function LoginPage() {
   const { login, userData } = useAuth();
   const router = useRouter();
 
+  // Si ya hay sesión activa, redirigir sin agregar /login al historial
+  useEffect(() => {
+    if (userData) {
+      router.replace(userData.rol === 'superadmin' ? '/admin/dashboard' : '/supervisor/dashboard');
+    }
+  }, [userData, router]);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
       await login(email, password);
-      // Redirect is handled by page.tsx root which watches userData via onAuthStateChanged
-      router.push('/');
+      // replace evita que el botón atrás regrese al login
+      router.replace('/');
     } catch (err: any) {
       const msg = err?.code === 'auth/invalid-credential'
         ? 'Credenciales incorrectas. Verifica tu email y contraseña.'
