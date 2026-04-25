@@ -1,0 +1,105 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: obtiene el documento del usuario autenticado
+    function userData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isSuperadmin() {
+      return isAuthenticated() && userData().rol == 'superadmin';
+    }
+
+    function isSupervisor() {
+      return isAuthenticated() && userData().rol == 'supervisor';
+    }
+
+    // Devuelve el cuadrilla_id del supervisor autenticado
+    function myCuadrillaId() {
+      return userData().cuadrilla_id;
+    }
+
+    // ── Usuarios ──────────────────────────────────────────────────────────────
+    // Solo el propio usuario puede leer su perfil; solo superadmin puede crear/editar
+    match /users/{userId} {
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isSuperadmin());
+      allow write: if isSuperadmin();
+    }
+
+    // ── Cuadrillas ────────────────────────────────────────────────────────────
+    // Todos los autenticados leen; solo superadmin escribe
+    match /cuadrillas/{cuadrillaId} {
+      allow read: if isAuthenticated();
+      allow write: if isSuperadmin();
+    }
+
+    // ── Partidas (catálogo) ───────────────────────────────────────────────────
+    // Solo lectura para autenticados; escritura solo superadmin
+    match /partidas/{partidaId} {
+      allow read: if isAuthenticated();
+      allow write: if isSuperadmin();
+    }
+
+    // ── Órdenes de Mantenimiento ──────────────────────────────────────────────
+    // Supervisor lee solo las OMs donde su cuadrilla está incluida
+    // Supervisor puede crear OMs y actualizar (unirse, valorizar)
+    // Superadmin tiene acceso total
+    match /ordenes_mantenimiento/{ordenId} {
+      allow read: if isSuperadmin()
+                  || (isSupervisor() && myCuadrillaId() in resource.data.cuadrillas_ids);
+      // Crear OM: cualquier supervisor autenticado
+      allow create: if isSupervisor();
+      // Actualizar: supervisor si su cuadrilla ya está en la OM (unirse/valorizar)
+      // o si está agregando su cuadrilla por primera vez
+      allow update: if isSuperadmin()
+                    || (isSupervisor() && (
+                          myCuadrillaId() in resource.data.cuadrillas_ids
+                       || myCuadrillaId() in request.resource.data.cuadrillas_ids
+                    ));
+      allow delete: if isSuperadmin();
+    }
+
+    // ── Items de OM ───────────────────────────────────────────────────────────
+    // Supervisor solo puede leer/escribir items de su propia cuadrilla
+    match /items_om/{itemId} {
+      allow read: if isSuperadmin()
+                  || (isSupervisor() && resource.data.cuadrilla_id == myCuadrillaId());
+      allow create: if isSupervisor()
+                    && request.resource.data.cuadrilla_id == myCuadrillaId();
+      allow update: if isSuperadmin()
+                    || (isSupervisor() && resource.data.cuadrilla_id == myCuadrillaId());
+      allow delete: if isSuperadmin()
+                    || (isSupervisor() && resource.data.cuadrilla_id == myCuadrillaId());
+    }
+
+    // ── Trabajos Libres ───────────────────────────────────────────────────────
+    match /trabajos_libres/{tlId} {
+      allow read: if isSuperadmin()
+                  || (isSupervisor() && resource.data.cuadrilla_id == myCuadrillaId());
+      allow create: if isSupervisor()
+                    && request.resource.data.cuadrilla_id == myCuadrillaId();
+      allow update: if isSuperadmin()
+                    || (isSupervisor() && resource.data.cuadrilla_id == myCuadrillaId());
+      allow delete: if isSuperadmin();
+    }
+
+    // ── Items de TL ───────────────────────────────────────────────────────────
+    match /items_tl/{itemId} {
+      allow read: if isSuperadmin()
+                  || (isSupervisor() && resource.data.cuadrilla_id == myCuadrillaId());
+      allow create: if isSupervisor()
+                    && request.resource.data.cuadrilla_id == myCuadrillaId();
+      allow update: if isSuperadmin()
+                    || (isSupervisor() && resource.data.cuadrilla_id == myCuadrillaId());
+      allow delete: if isSuperadmin()
+                    || (isSupervisor() && resource.data.cuadrilla_id == myCuadrillaId());
+    }
+
+  }
+}

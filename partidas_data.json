@@ -1,0 +1,1586 @@
+[
+  {
+    "codigo": "AP-001",
+    "descripcion": "Inspección  diurna de  Alumbrado Público",
+    "unidad": "Punto de Luz",
+    "categoria": "AP",
+    "precio_unitario": 1.0,
+    "codigo_sap": "300530"
+  },
+  {
+    "codigo": "AP-002",
+    "descripcion": "Inspección nocturna de Alumbrado Público",
+    "unidad": "Punto de luz",
+    "categoria": "AP",
+    "precio_unitario": 1.0,
+    "codigo_sap": "300531"
+  },
+  {
+    "codigo": "AP-003",
+    "descripcion": "Medición completa del nivel de iluminación del Alumbrado público",
+    "unidad": "Vano",
+    "categoria": "AP",
+    "precio_unitario": 100.0,
+    "codigo_sap": "300540"
+  },
+  {
+    "codigo": "AP-005",
+    "descripcion": "Normalización de Reclamos de Alumbrado Público (Res. 078-2007) - Con apoyo carro Telescópico",
+    "unidad": "Cjto",
+    "categoria": "AP",
+    "precio_unitario": 120.0,
+    "codigo_sap": "300541"
+  },
+  {
+    "codigo": "AP-006",
+    "descripcion": "Cambio de Lámpara en forma masiva - Con apoyo carro Telescópico",
+    "unidad": "Lámpara",
+    "categoria": "AP",
+    "precio_unitario": 60.0,
+    "codigo_sap": "300525"
+  },
+  {
+    "codigo": "AP-007",
+    "descripcion": "Cambio/Traslado de Pastoral c/Luminaria - Con apoyo carro Telescópico",
+    "unidad": "Cjto",
+    "categoria": "AP",
+    "precio_unitario": 50.0,
+    "codigo_sap": "300528"
+  },
+  {
+    "codigo": "AP-008",
+    "descripcion": "Retiro de pastoral o luminaria - Con apoyo carro Telescópico",
+    "unidad": "Cjto",
+    "categoria": "AP",
+    "precio_unitario": 50.0,
+    "codigo_sap": "300546"
+  },
+  {
+    "codigo": "AP-009",
+    "descripcion": "Cambio o Instalación de luminaria - Con apoyo carro Telescópico",
+    "unidad": "Cjto",
+    "categoria": "AP",
+    "precio_unitario": 80.0,
+    "codigo_sap": "300523"
+  },
+  {
+    "codigo": "AP-009A",
+    "descripcion": "Instalación de artefacto de alumbrado público - Con apoyo carro Telescópico",
+    "unidad": "Und",
+    "categoria": "AP",
+    "precio_unitario": 80.0,
+    "codigo_sap": "300532"
+  },
+  {
+    "codigo": "AP-010",
+    "descripcion": "Rehabilitación de luminaria",
+    "unidad": "Lum",
+    "categoria": "AP",
+    "precio_unitario": 40.0,
+    "codigo_sap": "300544"
+  },
+  {
+    "codigo": "AP-011",
+    "descripcion": "Mantenimiento de Luminarias - Con apoyo carro Telescópico",
+    "unidad": "Lum",
+    "categoria": "AP",
+    "precio_unitario": 70.0,
+    "codigo_sap": "300537"
+  },
+  {
+    "codigo": "AP-015",
+    "descripcion": "Mantenimiento de  Equipos de Control de AP - Con apoyo carro Telescópico",
+    "unidad": "Cjto",
+    "categoria": "AP",
+    "precio_unitario": 60.0,
+    "codigo_sap": "300534"
+  },
+  {
+    "codigo": "AP-016",
+    "descripcion": "Cambio y/o instalación de equipos de control de AP  - Con apoyo carro Telescópico",
+    "unidad": "Cjto",
+    "categoria": "AP",
+    "precio_unitario": 70.0,
+    "codigo_sap": "300522"
+  },
+  {
+    "codigo": "AP-017",
+    "descripcion": "Reprogramación de Relojes en SED aérea",
+    "unidad": "Reloj",
+    "categoria": "AP",
+    "precio_unitario": 50.0,
+    "codigo_sap": "302048"
+  },
+  {
+    "codigo": "BT-001",
+    "descripcion": "Inspección Minuciosa de redes BT",
+    "unidad": "Estructura",
+    "categoria": "BT",
+    "precio_unitario": 4.0,
+    "codigo_sap": "300575"
+  },
+  {
+    "codigo": "BT-002",
+    "descripcion": "Inspección Ligera de redes BT por SED",
+    "unidad": "SED",
+    "categoria": "BT",
+    "precio_unitario": 40.0,
+    "codigo_sap": "300574"
+  },
+  {
+    "codigo": "BT-003",
+    "descripcion": "Limpieza de Franja de Servidumbre – Retoños, arbustos, maguey, etc)",
+    "unidad": "Km",
+    "categoria": "BT",
+    "precio_unitario": 800.0,
+    "codigo_sap": "300589"
+  },
+  {
+    "codigo": "BT-004",
+    "descripcion": "Mantenimiento de Retenida",
+    "unidad": "Cjto",
+    "categoria": "BT",
+    "precio_unitario": 100.0,
+    "codigo_sap": "300596"
+  },
+  {
+    "codigo": "BT-006",
+    "descripcion": "Retiro de Retenida",
+    "unidad": "Cjto",
+    "categoria": "BT",
+    "precio_unitario": 20.0,
+    "codigo_sap": "300612"
+  },
+  {
+    "codigo": "BT-007",
+    "descripcion": "Instalación o cambio total Retenida.",
+    "unidad": "Cjto",
+    "categoria": "BT",
+    "precio_unitario": 250.0,
+    "codigo_sap": "300568"
+  },
+  {
+    "codigo": "BT-007A",
+    "descripcion": "Retemplado de Retenida",
+    "unidad": "Cjto",
+    "categoria": "BT",
+    "precio_unitario": 100.0,
+    "codigo_sap": "300609"
+  },
+  {
+    "codigo": "BT-007B",
+    "descripcion": "Cambio ó instalación de Cable de Acero",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 60.0,
+    "codigo_sap": "300569"
+  },
+  {
+    "codigo": "BT-008",
+    "descripcion": "Mantenimiento de Puesta a Tierra con Varilla",
+    "unidad": "Cjto",
+    "categoria": "BT",
+    "precio_unitario": 500.0,
+    "codigo_sap": "300595"
+  },
+  {
+    "codigo": "BT-010",
+    "descripcion": "Cambio o instalacion de Conductor bajada a tierra",
+    "unidad": "Cjto",
+    "categoria": "BT",
+    "precio_unitario": 200.0,
+    "codigo_sap": "300565"
+  },
+  {
+    "codigo": "BT-011",
+    "descripcion": "Instalación de Nueva Puesta a Tierra",
+    "unidad": "Cjto",
+    "categoria": "BT",
+    "precio_unitario": 700.0,
+    "codigo_sap": "300567"
+  },
+  {
+    "codigo": "BT-012",
+    "descripcion": "Mantenimiento de Armados de BT",
+    "unidad": "Cjto",
+    "categoria": "BT",
+    "precio_unitario": 50.0,
+    "codigo_sap": "300590"
+  },
+  {
+    "codigo": "BT-013",
+    "descripcion": "Cambio de Aisladores de BT - cualquier tipo",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 20.0,
+    "codigo_sap": "300552"
+  },
+  {
+    "codigo": "BT-014",
+    "descripcion": "Cambio de Portalínea BT - cualquier tipo",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 20.0,
+    "codigo_sap": "300558"
+  },
+  {
+    "codigo": "BT-015",
+    "descripcion": "Cambio de Ferretería de Poste de Alineamiento o Alineamento-Derivación",
+    "unidad": "Estructura",
+    "categoria": "BT",
+    "precio_unitario": 70.0,
+    "codigo_sap": "300556"
+  },
+  {
+    "codigo": "BT-016",
+    "descripcion": "Cambio ferretería en Poste de Fin de Línea",
+    "unidad": "Estructura",
+    "categoria": "BT",
+    "precio_unitario": 100.0,
+    "codigo_sap": "300557"
+  },
+  {
+    "codigo": "BT-017",
+    "descripcion": "Cambio/Instalación de Bastidor (adec. DMS)",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 300.0,
+    "codigo_sap": "300563"
+  },
+  {
+    "codigo": "BT-017A",
+    "descripcion": "Cambio/Instalacion de Ménsula Metálica",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 300.0,
+    "codigo_sap": "300566"
+  },
+  {
+    "codigo": "BT-018",
+    "descripcion": "Mantenimiento de Poste",
+    "unidad": "Cjto",
+    "categoria": "BT",
+    "precio_unitario": 30.0,
+    "codigo_sap": "300594"
+  },
+  {
+    "codigo": "BT-019",
+    "descripcion": "Cambio de poste madera/concreto por poste de concreto",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 500.0,
+    "codigo_sap": "300559"
+  },
+  {
+    "codigo": "BT-020",
+    "descripcion": "Cambio de poste madera por poste de madera",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 450.0,
+    "codigo_sap": "300561"
+  },
+  {
+    "codigo": "BT-021",
+    "descripcion": "Verticalización de poste de concreto",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 150.0,
+    "codigo_sap": "300620"
+  },
+  {
+    "codigo": "BT-021A",
+    "descripcion": "Refuerzo de Poste",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 80.0,
+    "codigo_sap": "300605"
+  },
+  {
+    "codigo": "BT-022",
+    "descripcion": "Protección de estructuras de BT",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 250.0,
+    "codigo_sap": "300601"
+  },
+  {
+    "codigo": "BT-023",
+    "descripcion": "Reubicación de poste y accesorios",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 500.0,
+    "codigo_sap": "300613"
+  },
+  {
+    "codigo": "BT-024",
+    "descripcion": "Instalación de poste CAC y accesorios",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 320.0,
+    "codigo_sap": "300581"
+  },
+  {
+    "codigo": "BT-025",
+    "descripcion": "Retiro de Poste y accesorios",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 300.0,
+    "codigo_sap": "300611"
+  },
+  {
+    "codigo": "BT-026",
+    "descripcion": "Rehabilitacion de postes de Fierro",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 200.0,
+    "codigo_sap": "300607"
+  },
+  {
+    "codigo": "BT-027",
+    "descripcion": "Protección de estructuras con pintura",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 200.0,
+    "codigo_sap": "300602"
+  },
+  {
+    "codigo": "BT-028",
+    "descripcion": "Señalización  en Poste",
+    "unidad": "Poste",
+    "categoria": "BT",
+    "precio_unitario": 60.0,
+    "codigo_sap": "300618"
+  },
+  {
+    "codigo": "BT-029",
+    "descripcion": "Mantenimiento de Conductor",
+    "unidad": "km",
+    "categoria": "BT",
+    "precio_unitario": 600.0,
+    "codigo_sap": "300592"
+  },
+  {
+    "codigo": "BT-030",
+    "descripcion": "Cambio de Conductor Autoportante",
+    "unidad": "m",
+    "categoria": "BT",
+    "precio_unitario": 3.7,
+    "codigo_sap": "300554"
+  },
+  {
+    "codigo": "BT-031",
+    "descripcion": "Reflechado de Conductor convencional CPI",
+    "unidad": "m",
+    "categoria": "BT",
+    "precio_unitario": 1.8,
+    "codigo_sap": "300604"
+  },
+  {
+    "codigo": "BT-031A",
+    "descripcion": "Reflechado de conductor autoportante",
+    "unidad": "m",
+    "categoria": "BT",
+    "precio_unitario": 2.5,
+    "codigo_sap": "300603"
+  },
+  {
+    "codigo": "BT-032",
+    "descripcion": "Cambio de Conductor Convencional CPI",
+    "unidad": "m",
+    "categoria": "BT",
+    "precio_unitario": 2.5,
+    "codigo_sap": "300555"
+  },
+  {
+    "codigo": "BT-033",
+    "descripcion": "Cambio de Cable NYY",
+    "unidad": "m",
+    "categoria": "BT",
+    "precio_unitario": 30.0,
+    "codigo_sap": "300553"
+  },
+  {
+    "codigo": "BT-034",
+    "descripcion": "Instalación de conductor autoportante",
+    "unidad": "m",
+    "categoria": "BT",
+    "precio_unitario": 3.5,
+    "codigo_sap": "300578"
+  },
+  {
+    "codigo": "BT-035",
+    "descripcion": "Instalación de conductor convencional CPI",
+    "unidad": "m",
+    "categoria": "BT",
+    "precio_unitario": 2.2,
+    "codigo_sap": "300579"
+  },
+  {
+    "codigo": "BT-036",
+    "descripcion": "Reubicacion de conductor aéreo y accesorios",
+    "unidad": "m",
+    "categoria": "BT",
+    "precio_unitario": 5.0,
+    "codigo_sap": "300614"
+  },
+  {
+    "codigo": "BT-037",
+    "descripcion": "Desconexión y Reconexión de acometidas",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 20.0,
+    "codigo_sap": "300571"
+  },
+  {
+    "codigo": "BT-039",
+    "descripcion": "Mantenimiento de Empalmes y Derivaciones",
+    "unidad": "Cjto",
+    "categoria": "BT",
+    "precio_unitario": 20.0,
+    "codigo_sap": "300593"
+  },
+  {
+    "codigo": "BT-040",
+    "descripcion": "Apertura y Cierre de puentes",
+    "unidad": "Cjto",
+    "categoria": "BT",
+    "precio_unitario": 30.0,
+    "codigo_sap": "300548"
+  },
+  {
+    "codigo": "BT-041",
+    "descripcion": "Empalme de conductor aéreo",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 25.0,
+    "codigo_sap": "300572"
+  },
+  {
+    "codigo": "BT-042",
+    "descripcion": "Emplame de conductor NYY",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 150.0,
+    "codigo_sap": "300573"
+  },
+  {
+    "codigo": "BT-044",
+    "descripcion": "Medicion de Resistencia del Pozo a Tierra (*)",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 50.0,
+    "codigo_sap": "300765"
+  },
+  {
+    "codigo": "BT-045",
+    "descripcion": "Balance de cargas en circuitos de SED",
+    "unidad": "SED",
+    "categoria": "BT",
+    "precio_unitario": 300.0,
+    "codigo_sap": "300550"
+  },
+  {
+    "codigo": "BT-046",
+    "descripcion": "Medición y detección de puntos calientes",
+    "unidad": "Terna",
+    "categoria": "BT",
+    "precio_unitario": 50.0,
+    "codigo_sap": "300577"
+  },
+  {
+    "codigo": "BT-047",
+    "descripcion": "Medición de parámetros puntuales en red BT",
+    "unidad": "Terna",
+    "categoria": "BT",
+    "precio_unitario": 80.0,
+    "codigo_sap": "300599"
+  },
+  {
+    "codigo": "BT-048",
+    "descripcion": "Instalación/Retiro de registradores NTCSE en Suministros",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 150.0,
+    "codigo_sap": "300587"
+  },
+  {
+    "codigo": "BT-049",
+    "descripcion": "Cambio o Instalación de Cajas de distribución de acometidas",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 100.0,
+    "codigo_sap": "300564"
+  },
+  {
+    "codigo": "BT-050",
+    "descripcion": "Transporte de Cuadrillas hasta entre 40 - 120 km",
+    "unidad": "Evento",
+    "categoria": "BT",
+    "precio_unitario": 290.0,
+    "codigo_sap": "300100"
+  },
+  {
+    "codigo": "BT-051",
+    "descripcion": "Transporte de Cuadrillas hasta entre 120 - 200 km",
+    "unidad": "Evento",
+    "categoria": "BT",
+    "precio_unitario": 500.0,
+    "codigo_sap": "300099"
+  },
+  {
+    "codigo": "BT-052",
+    "descripcion": "Transporte de Cuadrillas a más de 200 Km.",
+    "unidad": "Evento",
+    "categoria": "BT",
+    "precio_unitario": 1000.0,
+    "codigo_sap": "300098"
+  },
+  {
+    "codigo": "BT-061",
+    "descripcion": "Verificiación del Servicio Eléctrico del Suministro",
+    "unidad": "Evento",
+    "categoria": "BT",
+    "precio_unitario": 70.0,
+    "codigo_sap": "300619"
+  },
+  {
+    "codigo": "BT-062",
+    "descripcion": "Denuncia Policial",
+    "unidad": "Denuncia",
+    "categoria": "BT",
+    "precio_unitario": 500.0,
+    "codigo_sap": "300570"
+  },
+  {
+    "codigo": "BT-063",
+    "descripcion": "Retiro de pancartas en postes de BT",
+    "unidad": "Poste",
+    "categoria": "BT",
+    "precio_unitario": 60.0,
+    "codigo_sap": "300610"
+  },
+  {
+    "codigo": "BT-063A",
+    "descripcion": "Inspección por Emergencia BT",
+    "unidad": "Estructura",
+    "categoria": "BT",
+    "precio_unitario": 5.0,
+    "codigo_sap": "300576"
+  },
+  {
+    "codigo": "BT-063B",
+    "descripcion": "Entrega de documentos a Clientes",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 25.0,
+    "codigo_sap": "300600"
+  },
+  {
+    "codigo": "BT-064",
+    "descripcion": "Digitacion de registros de mantenimiento",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 5.0,
+    "codigo_sap": "303926"
+  },
+  {
+    "codigo": "BT-065",
+    "descripcion": "Reporte de Atención de Denuncias en Tiempo Real",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 5.0,
+    "codigo_sap": "305071"
+  },
+  {
+    "codigo": "BT-066",
+    "descripcion": "Actualización de Sistemas Eléctricos (GIS)",
+    "unidad": "Serv",
+    "categoria": "BT",
+    "precio_unitario": 9.0,
+    "codigo_sap": "305681"
+  },
+  {
+    "codigo": "BT-067",
+    "descripcion": "Elaboracion de Informes Tecnicos",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 25.0,
+    "codigo_sap": "303356"
+  },
+  {
+    "codigo": "BT-054",
+    "descripcion": "Apertura y Cierre de zanja",
+    "unidad": "ml",
+    "categoria": "BT",
+    "precio_unitario": 100.0,
+    "codigo_sap": "300549"
+  },
+  {
+    "codigo": "BT-055",
+    "descripcion": "Rotura y Reparación de Vereda  (*)",
+    "unidad": "m2",
+    "categoria": "BT",
+    "precio_unitario": 200.0,
+    "codigo_sap": "300617"
+  },
+  {
+    "codigo": "BT-056",
+    "descripcion": "Rotura y repacion de pista azfalto   (*)",
+    "unidad": "m2",
+    "categoria": "BT",
+    "precio_unitario": 400.0,
+    "codigo_sap": "300615"
+  },
+  {
+    "codigo": "BT-057",
+    "descripcion": "Rotura y repacion de pista concreto   (*)",
+    "unidad": "m2",
+    "categoria": "BT",
+    "precio_unitario": 400.0,
+    "codigo_sap": "300616"
+  },
+  {
+    "codigo": "BT-058",
+    "descripcion": "Adecuación perfiles metálicos (agujeros, soldadura, corte)",
+    "unidad": "Und",
+    "categoria": "BT",
+    "precio_unitario": 25.0,
+    "codigo_sap": "303925"
+  },
+  {
+    "codigo": "MT-001",
+    "descripcion": "Inspección Ligera de redes MT",
+    "unidad": "Est",
+    "categoria": "MT",
+    "precio_unitario": 4.0,
+    "codigo_sap": "300673"
+  },
+  {
+    "codigo": "MT-002",
+    "descripcion": "Inspección Minuciosa de redes MT",
+    "unidad": "Est",
+    "categoria": "MT",
+    "precio_unitario": 6.0,
+    "codigo_sap": "300674"
+  },
+  {
+    "codigo": "MT-004",
+    "descripcion": "Mantenimiento de franja de servidumbre – Poda de árboles, retoños, arbustos, maguey, etc)",
+    "unidad": "Km",
+    "categoria": "MT",
+    "precio_unitario": 500.0,
+    "codigo_sap": "300703"
+  },
+  {
+    "codigo": "MT-005",
+    "descripcion": "Limpieza de franja de servidumbre –  Tala de árboles",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 120.0,
+    "codigo_sap": "300693"
+  },
+  {
+    "codigo": "MT-006",
+    "descripcion": "Cambiar / Instalar Retenida completa",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 250.0,
+    "codigo_sap": "300654"
+  },
+  {
+    "codigo": "MT-007",
+    "descripcion": "Mantenimiento de Retenida",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 90.0,
+    "codigo_sap": "300705"
+  },
+  {
+    "codigo": "MT-008",
+    "descripcion": "Cambio o instalación de Canaleta de Retenida",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 50.0,
+    "codigo_sap": "300641"
+  },
+  {
+    "codigo": "MT-008A",
+    "descripcion": "Cambio o reposición de Cable de Retenida",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 80.0,
+    "codigo_sap": "300663"
+  },
+  {
+    "codigo": "MT-009",
+    "descripcion": "Mantenimiento de Armados",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 60.0,
+    "codigo_sap": "300700"
+  },
+  {
+    "codigo": "MT-011",
+    "descripcion": "Cambiar/ instalar Aislador PIN",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 30.0,
+    "codigo_sap": "300634"
+  },
+  {
+    "codigo": "MT-012",
+    "descripcion": "Cambiar/instalar  Aislador Suspensión (Cadena o polim)",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 50.0,
+    "codigo_sap": "300636"
+  },
+  {
+    "codigo": "MT-013",
+    "descripcion": "Cambio o instalación de Conductor bajada a tierra",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 150.0,
+    "codigo_sap": "300642"
+  },
+  {
+    "codigo": "MT-014",
+    "descripcion": "Cambiar/instalar  Espigas para aislador PIN",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 40.0,
+    "codigo_sap": "300648"
+  },
+  {
+    "codigo": "MT-015",
+    "descripcion": "Cambiar/Instalar Ménsula o Cruceta de Concreto",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 150.0,
+    "codigo_sap": "300651"
+  },
+  {
+    "codigo": "MT-016",
+    "descripcion": "Cambiar/Instalar Ménsula o Cruceta de Madera o fierro",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 150.0,
+    "codigo_sap": "300652"
+  },
+  {
+    "codigo": "MT-017",
+    "descripcion": "Cambiar / Instalar Riostra en poste MT",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 30.0,
+    "codigo_sap": "300655"
+  },
+  {
+    "codigo": "MT-018",
+    "descripcion": "Limpieza Manual de Aisladores PIN",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 50.0,
+    "codigo_sap": "300695"
+  },
+  {
+    "codigo": "MT-019",
+    "descripcion": "Cambiar amarres y/o preformados en redes MT",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 40.0,
+    "codigo_sap": "300624"
+  },
+  {
+    "codigo": "MT-020",
+    "descripcion": "Rotura y Reparación de Vereda",
+    "unidad": "M2",
+    "categoria": "MT",
+    "precio_unitario": 350.0,
+    "codigo_sap": "301416"
+  },
+  {
+    "codigo": "MT-021",
+    "descripcion": "Rotura y Reparación de  Pista de asfalto",
+    "unidad": "M2",
+    "categoria": "MT",
+    "precio_unitario": 400.0,
+    "codigo_sap": "301417"
+  },
+  {
+    "codigo": "MT-022",
+    "descripcion": "Rotura y Reparación de pista de concreto",
+    "unidad": "M2",
+    "categoria": "MT",
+    "precio_unitario": 400.0,
+    "codigo_sap": "301418"
+  },
+  {
+    "codigo": "MT-024",
+    "descripcion": "Cambio de Poste de Concreto MT",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 600.0,
+    "codigo_sap": "300629"
+  },
+  {
+    "codigo": "MT-025",
+    "descripcion": "Instalación de poste de concreto MT sin grúa",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 1500.0,
+    "codigo_sap": "300630"
+  },
+  {
+    "codigo": "MT-026",
+    "descripcion": "Cambio de Poste de Madera",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 600.0,
+    "codigo_sap": "300631"
+  },
+  {
+    "codigo": "MT-027",
+    "descripcion": "Instalación de poste de madera sin grua",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 800.0,
+    "codigo_sap": "300685"
+  },
+  {
+    "codigo": "MT-028",
+    "descripcion": "Instalar  poste de concreto MT",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 500.0,
+    "codigo_sap": "300684"
+  },
+  {
+    "codigo": "MT-028A",
+    "descripcion": "Retiro de poste de concreto o madera de MT",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 350.0,
+    "codigo_sap": "300715"
+  },
+  {
+    "codigo": "MT-029",
+    "descripcion": "Instalar poste de madera MT",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 500.0,
+    "codigo_sap": "300691"
+  },
+  {
+    "codigo": "MT-030",
+    "descripcion": "Proteger Base de poste MT – Dado Concreto",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 500.0,
+    "codigo_sap": "300712"
+  },
+  {
+    "codigo": "MT-031",
+    "descripcion": "Reforzar Estructuras con rieles/perfiles",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 120.0,
+    "codigo_sap": "300713"
+  },
+  {
+    "codigo": "MT-032",
+    "descripcion": "Reubicar Poste de concreto MT",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 800.0,
+    "codigo_sap": "300717"
+  },
+  {
+    "codigo": "MT-033",
+    "descripcion": "Reubicar Poste de madera MT",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 800.0,
+    "codigo_sap": "300718"
+  },
+  {
+    "codigo": "MT-034",
+    "descripcion": "Traslado de poste de concreto MT",
+    "unidad": "km",
+    "categoria": "MT",
+    "precio_unitario": 2000.0,
+    "codigo_sap": "301420"
+  },
+  {
+    "codigo": "MT-034A",
+    "descripcion": "Traslado manual de poste de concreto",
+    "unidad": "km",
+    "categoria": "MT",
+    "precio_unitario": 3000.0,
+    "codigo_sap": "300724"
+  },
+  {
+    "codigo": "MT-035",
+    "descripcion": "Traslado manual de poste de madera MT",
+    "unidad": "km",
+    "categoria": "MT",
+    "precio_unitario": 3000.0,
+    "codigo_sap": "300725"
+  },
+  {
+    "codigo": "MT-037",
+    "descripcion": "Verticalización de Estructuras",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 250.0,
+    "codigo_sap": "300728"
+  },
+  {
+    "codigo": "MT-038",
+    "descripcion": "Protección c/pintura poste MT en servicio",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 100.0,
+    "codigo_sap": "300711"
+  },
+  {
+    "codigo": "MT-039",
+    "descripcion": "Cambiar armado de estructura SAB",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 2500.0,
+    "codigo_sap": "300627"
+  },
+  {
+    "codigo": "MT-040",
+    "descripcion": "Cambiar estructura SAM",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 2000.0,
+    "codigo_sap": "300628"
+  },
+  {
+    "codigo": "MT-041",
+    "descripcion": "Instalar bloque de protección contra impacto",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 1500.0,
+    "codigo_sap": "300677"
+  },
+  {
+    "codigo": "MT-041E",
+    "descripcion": "Montaje de Estructura tipo SAM",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 1000.0,
+    "codigo_sap": "300709"
+  },
+  {
+    "codigo": "MT-041F",
+    "descripcion": "Montaje de Estructura SAB",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 1500.0,
+    "codigo_sap": "300708"
+  },
+  {
+    "codigo": "MT-042",
+    "descripcion": "Señalización con Placas",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 120.0,
+    "codigo_sap": "300722"
+  },
+  {
+    "codigo": "MT-043",
+    "descripcion": "Señalizar estructura de MT",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 100.0,
+    "codigo_sap": "300723"
+  },
+  {
+    "codigo": "MT-044",
+    "descripcion": "Apertura y cierre de zanja MT",
+    "unidad": "ML",
+    "categoria": "MT",
+    "precio_unitario": 200.0,
+    "codigo_sap": "300622"
+  },
+  {
+    "codigo": "MT-045",
+    "descripcion": "Cambiar /instalar Cable de energía Subterraneo M.T. hasta 70 mm2",
+    "unidad": "m/terna",
+    "categoria": "MT",
+    "precio_unitario": 150.0,
+    "codigo_sap": "300639"
+  },
+  {
+    "codigo": "MT-45A",
+    "descripcion": "Cambiar /instalar Cable de energía Subterraneo M.T. mayor a 70 mm2",
+    "unidad": "m/terna",
+    "categoria": "MT",
+    "precio_unitario": 300.0,
+    "codigo_sap": "300640"
+  },
+  {
+    "codigo": "MT-046",
+    "descripcion": "Cambiar  Conductor de MT",
+    "unidad": "km/fase",
+    "categoria": "MT",
+    "precio_unitario": 1200.0,
+    "codigo_sap": "300626"
+  },
+  {
+    "codigo": "MT-047",
+    "descripcion": "Empalme de Conductor MT (entorche o conector)",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 40.0,
+    "codigo_sap": "300667"
+  },
+  {
+    "codigo": "MT-048",
+    "descripcion": "Cambiar/instalar Empalmes cable de energía M.T. hasta 70mm2",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 300.0,
+    "codigo_sap": "300645"
+  },
+  {
+    "codigo": "MT-048A",
+    "descripcion": "Cambiar/instalar Empalmes de cables de energía  M.T. mayor  70mm2",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 400.0,
+    "codigo_sap": "300646"
+  },
+  {
+    "codigo": "MT-049",
+    "descripcion": "Cambiar / Instalar Terminación de cable en MT",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 300.0,
+    "codigo_sap": "300660"
+  },
+  {
+    "codigo": "MT-050",
+    "descripcion": "Cambiar / Reparar cuello muerto de MT",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 50.0,
+    "codigo_sap": "300662"
+  },
+  {
+    "codigo": "MT-051",
+    "descripcion": "Rev/Ajte/Limp Conectores Empalmes Aéreos",
+    "unidad": "CJTO",
+    "categoria": "MT",
+    "precio_unitario": 50.0,
+    "codigo_sap": "300720"
+  },
+  {
+    "codigo": "MT-052",
+    "descripcion": "Instalación de Ductos de Cruzada MT",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 250.0,
+    "codigo_sap": "300682"
+  },
+  {
+    "codigo": "MT-053",
+    "descripcion": "Instalación/reposición de Líneas Aéreas en M.T.",
+    "unidad": "km/fase",
+    "categoria": "MT",
+    "precio_unitario": 900.0,
+    "codigo_sap": "300688"
+  },
+  {
+    "codigo": "MT-054",
+    "descripcion": "Mantenimiento Empalmes y Terminaciones",
+    "unidad": "kit",
+    "categoria": "MT",
+    "precio_unitario": 80.0,
+    "codigo_sap": "300721"
+  },
+  {
+    "codigo": "MT-055",
+    "descripcion": "Mediciones de Aislamiento en cables subterraneos",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 500.0,
+    "codigo_sap": "300706"
+  },
+  {
+    "codigo": "MT-056",
+    "descripcion": "Trasladar subida terminación cable MT",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 800.0,
+    "codigo_sap": "300727"
+  },
+  {
+    "codigo": "MT-057",
+    "descripcion": "Instalación cubiertas dieléctricas en conductor desnudo MT",
+    "unidad": "m",
+    "categoria": "MT",
+    "precio_unitario": 50.0,
+    "codigo_sap": "300680"
+  },
+  {
+    "codigo": "MT-058",
+    "descripcion": "Instalación cubiertas dieléctricas en conductor de bajadas a trafo",
+    "unidad": "Fase",
+    "categoria": "MT",
+    "precio_unitario": 70.0,
+    "codigo_sap": "300679"
+  },
+  {
+    "codigo": "MT-060",
+    "descripcion": "Retemplado de conductores en M.T.",
+    "unidad": "km/fase",
+    "categoria": "MT",
+    "precio_unitario": 350.0,
+    "codigo_sap": "300714"
+  },
+  {
+    "codigo": "MT-061",
+    "descripcion": "Cambiar/instalar Pararrayos",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 60.0,
+    "codigo_sap": "300653"
+  },
+  {
+    "codigo": "MT-062",
+    "descripcion": "Cambia/instalar Seccionador Tipo Cut Out",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 60.0,
+    "codigo_sap": "300658"
+  },
+  {
+    "codigo": "MT-063",
+    "descripcion": "Limpieza y ajuste en Sistema de Protección y/o Maniobra (Recloser, Seccionado bajo carga, condensadores)",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 100.0,
+    "codigo_sap": "300698"
+  },
+  {
+    "codigo": "MT-064",
+    "descripcion": "Mantenimiento de equipo de protección y/o maniobra (Seccionador, pararrayo)",
+    "unidad": "UND",
+    "categoria": "MT",
+    "precio_unitario": 60.0,
+    "codigo_sap": "300702"
+  },
+  {
+    "codigo": "MT-065",
+    "descripcion": "Localización de Falla subterranea",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 400.0,
+    "codigo_sap": "300699"
+  },
+  {
+    "codigo": "MT-066",
+    "descripcion": "Cambio de Fusibles",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 40.0,
+    "codigo_sap": "303309"
+  },
+  {
+    "codigo": "MT-067",
+    "descripcion": "Apertura o cierre de Seccionadores",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 60.0,
+    "codigo_sap": "300621"
+  },
+  {
+    "codigo": "MT-068",
+    "descripcion": "Cuadrilla de Operación y emergencias",
+    "unidad": "(Cuad/mes)",
+    "categoria": "MT",
+    "precio_unitario": 38000.0,
+    "codigo_sap": "301243"
+  },
+  {
+    "codigo": "MT-068A",
+    "descripcion": "Alquiler de Grúa 6 TN",
+    "unidad": "HM",
+    "categoria": "MT",
+    "precio_unitario": 250.0,
+    "codigo_sap": "300066"
+  },
+  {
+    "codigo": "MT-068C",
+    "descripcion": "Cuadrilla de Operación y emergencias-A",
+    "unidad": "(Cuad/mes)",
+    "categoria": "MT",
+    "precio_unitario": 28000.0,
+    "codigo_sap": "301244"
+  },
+  {
+    "codigo": "MT-069",
+    "descripcion": "Inspección de Emergencia Diurno",
+    "unidad": "km",
+    "categoria": "MT",
+    "precio_unitario": 12.0,
+    "codigo_sap": "300670"
+  },
+  {
+    "codigo": "MT-070",
+    "descripcion": "Inspección de Emergencia Nocturno",
+    "unidad": "km",
+    "categoria": "MT",
+    "precio_unitario": 30.0,
+    "codigo_sap": "300671"
+  },
+  {
+    "codigo": "MT-071",
+    "descripcion": "Conexión y desconexión de “Cuellos”",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 60.0,
+    "codigo_sap": "300665"
+  },
+  {
+    "codigo": "MT-072",
+    "descripcion": "Medición de Tensiones y Corrientes en redes MT",
+    "unidad": "Cjto",
+    "categoria": "MT",
+    "precio_unitario": 600.0,
+    "codigo_sap": "300707"
+  },
+  {
+    "codigo": "MT-072A",
+    "descripcion": "Balanceo de Carga MT",
+    "unidad": "(Alim)",
+    "categoria": "MT",
+    "precio_unitario": 800.0,
+    "codigo_sap": "300623"
+  },
+  {
+    "codigo": "MT-073",
+    "descripcion": "Identificación y Paralización de construcciones por Riesgo Eléctrico Grave",
+    "unidad": "Und",
+    "categoria": "MT",
+    "precio_unitario": 500.0,
+    "codigo_sap": "300669"
+  },
+  {
+    "codigo": "SED-001",
+    "descripcion": "Inspección Minuciosa de SED",
+    "unidad": "SED",
+    "categoria": "SED",
+    "precio_unitario": 50.0,
+    "codigo_sap": "300749"
+  },
+  {
+    "codigo": "SED-002",
+    "descripcion": "Inspección Ligera de Subestaciones",
+    "unidad": "SED",
+    "categoria": "SED",
+    "precio_unitario": 40.0,
+    "codigo_sap": "300748"
+  },
+  {
+    "codigo": "SED-003",
+    "descripcion": "Actualización del inventario de SED",
+    "unidad": "SED",
+    "categoria": "SED",
+    "precio_unitario": 100.0,
+    "codigo_sap": "300729"
+  },
+  {
+    "codigo": "SED-004",
+    "descripcion": "Inspección termografica en SED",
+    "unidad": "SED",
+    "categoria": "SED",
+    "precio_unitario": 400.0,
+    "codigo_sap": "300750"
+  },
+  {
+    "codigo": "SED-005",
+    "descripcion": "Instalación/Retiro de registros NTCSE (incluye informe)",
+    "unidad": "SED",
+    "categoria": "SED",
+    "precio_unitario": 200.0,
+    "codigo_sap": "300755"
+  },
+  {
+    "codigo": "SED-006",
+    "descripcion": "Registro de Carga y Tensión  puntuales en SED's.",
+    "unidad": "SED",
+    "categoria": "SED",
+    "precio_unitario": 100.0,
+    "codigo_sap": "300769"
+  },
+  {
+    "codigo": "SED-007",
+    "descripcion": "Medición de resistencia del pozo a tierra",
+    "unidad": "UND",
+    "categoria": "SED",
+    "precio_unitario": 50.0,
+    "codigo_sap": "303271"
+  },
+  {
+    "codigo": "SED-008",
+    "descripcion": "Toma de muestra de aceite dielectrico de transformador",
+    "unidad": "TRAFO",
+    "categoria": "SED",
+    "precio_unitario": 200.0,
+    "codigo_sap": "300776"
+  },
+  {
+    "codigo": "SED-009",
+    "descripcion": "Mant. Exterior de Transformadores (limpieza, ajustes y otros)",
+    "unidad": "TRAFO",
+    "categoria": "SED",
+    "precio_unitario": 200.0,
+    "codigo_sap": "300762"
+  },
+  {
+    "codigo": "SED-010",
+    "descripcion": "Mant. Integral de Transformadores (en taller)",
+    "unidad": "TRAFO",
+    "categoria": "SED",
+    "precio_unitario": 3500.0,
+    "codigo_sap": "300764"
+  },
+  {
+    "codigo": "SED-011",
+    "descripcion": "Regulación de Taps",
+    "unidad": "TRAFO",
+    "categoria": "SED",
+    "precio_unitario": 150.0,
+    "codigo_sap": "300770"
+  },
+  {
+    "codigo": "SED-012",
+    "descripcion": "Cambio/Instalación de Transformador",
+    "unidad": "TRAFO",
+    "categoria": "SED",
+    "precio_unitario": 380.0,
+    "codigo_sap": "300736"
+  },
+  {
+    "codigo": "SED-013",
+    "descripcion": "Rotación de transformadores",
+    "unidad": "Cjto",
+    "categoria": "SED",
+    "precio_unitario": 700.0,
+    "codigo_sap": "300773"
+  },
+  {
+    "codigo": "SED-014",
+    "descripcion": "Instalación/Cambio de tableros de distribucion",
+    "unidad": "TABLERO",
+    "categoria": "SED",
+    "precio_unitario": 350.0,
+    "codigo_sap": "300742"
+  },
+  {
+    "codigo": "SED-015",
+    "descripcion": "Mantenimiento de Tablero de Protección y Medición  BT Trifásico",
+    "unidad": "Cjto",
+    "categoria": "SED",
+    "precio_unitario": 60.0,
+    "codigo_sap": "300761"
+  },
+  {
+    "codigo": "SED-016",
+    "descripcion": "Cambio y/o instalación de llaves termomagneticas, bases porta fusibles u otros similares.",
+    "unidad": "Cjto",
+    "categoria": "SED",
+    "precio_unitario": 200.0,
+    "codigo_sap": "300744"
+  },
+  {
+    "codigo": "SED-017",
+    "descripcion": "Reubicación de sistema de medición",
+    "unidad": "Cjto",
+    "categoria": "SED",
+    "precio_unitario": 400.0,
+    "codigo_sap": "300772"
+  },
+  {
+    "codigo": "SED-018",
+    "descripcion": "Limpieza, pintado y señalización exterior de tablero de Distribución",
+    "unidad": "TABLERO",
+    "categoria": "SED",
+    "precio_unitario": 350.0,
+    "codigo_sap": "300758"
+  },
+  {
+    "codigo": "SED-019",
+    "descripcion": "Reparación de tablero de distribución (puertas, bisagras, etc.)",
+    "unidad": "TABLERO",
+    "categoria": "SED",
+    "precio_unitario": 500.0,
+    "codigo_sap": "300771"
+  },
+  {
+    "codigo": "SED-020",
+    "descripcion": "Instalación/Cambio de cables de comunicación en SED",
+    "unidad": "TABLERO",
+    "categoria": "SED",
+    "precio_unitario": 120.0,
+    "codigo_sap": "300738"
+  },
+  {
+    "codigo": "SED-021",
+    "descripcion": "Cambio/Instalacion de terminales",
+    "unidad": "Cjto",
+    "categoria": "SED",
+    "precio_unitario": 100.0,
+    "codigo_sap": "300743"
+  },
+  {
+    "codigo": "SED-022",
+    "descripcion": "Limpieza de Locales de SS.EE. Caseta",
+    "unidad": "SED",
+    "categoria": "SED",
+    "precio_unitario": 250.0,
+    "codigo_sap": "300757"
+  },
+  {
+    "codigo": "SED-023",
+    "descripcion": "Pintado interior en SS.EE. Caseta",
+    "unidad": "SED",
+    "categoria": "SED",
+    "precio_unitario": 1200.0,
+    "codigo_sap": "300766"
+  },
+  {
+    "codigo": "SED-024",
+    "descripcion": "Pintar las Fachadas de las SS.EE. Caseta",
+    "unidad": "SED",
+    "categoria": "SED",
+    "precio_unitario": 1200.0,
+    "codigo_sap": "300767"
+  },
+  {
+    "codigo": "SED-025",
+    "descripcion": "Mant. Integral  de SS.EE. Caseta",
+    "unidad": "SED",
+    "categoria": "SED",
+    "precio_unitario": 500.0,
+    "codigo_sap": "300763"
+  },
+  {
+    "codigo": "SED-026",
+    "descripcion": "Cambio de Transformador Trifásico en Caseta",
+    "unidad": "SED",
+    "categoria": "SED",
+    "precio_unitario": 600.0,
+    "codigo_sap": "300737"
+  },
+  {
+    "codigo": "SED-027",
+    "descripcion": "Mantenimiento de PAT en SED",
+    "unidad": "SED",
+    "categoria": "SED",
+    "precio_unitario": 500.0,
+    "codigo_sap": "300760"
+  },
+  {
+    "codigo": "SED-028",
+    "descripcion": "Instalación de nuevo PAT en SED",
+    "unidad": "POZO A TIERRA",
+    "categoria": "SED",
+    "precio_unitario": 560.0,
+    "codigo_sap": "300741"
+  },
+  {
+    "codigo": "SED-029",
+    "descripcion": "Cambio/Instalación de caja de registro PAT",
+    "unidad": "POZO A TIERRA",
+    "categoria": "SED",
+    "precio_unitario": 90.0,
+    "codigo_sap": "300739"
+  },
+  {
+    "codigo": "SED-030",
+    "descripcion": "Cambio de tapa de registro de PAT en SED",
+    "unidad": "POZO A TIERRA",
+    "categoria": "SED",
+    "precio_unitario": 80.0,
+    "codigo_sap": "300733"
+  },
+  {
+    "codigo": "SED-031",
+    "descripcion": "Cambio de Protección Mecanica de Bajada a PAT en SED",
+    "unidad": "UND",
+    "categoria": "SED",
+    "precio_unitario": 180.0,
+    "codigo_sap": "300732"
+  },
+  {
+    "codigo": "SED-032",
+    "descripcion": "Cambio o instalación de Conductor bajada a PAT en SED",
+    "unidad": "Cjto",
+    "categoria": "SED",
+    "precio_unitario": 120.0,
+    "codigo_sap": "300740"
+  },
+  {
+    "codigo": "SED-033",
+    "descripcion": "Reducción de Resistencia PAT con contrapesos",
+    "unidad": "Cjto",
+    "categoria": "SED",
+    "precio_unitario": 400.0,
+    "codigo_sap": "300768"
+  },
+  {
+    "codigo": "SED-034",
+    "descripcion": "Señalización en poste y SED",
+    "unidad": "SED",
+    "categoria": "SED",
+    "precio_unitario": 80.0,
+    "codigo_sap": "300774"
+  },
+  {
+    "codigo": "SED-035",
+    "descripcion": "Señalización de Puesta a Tierra",
+    "unidad": "UND",
+    "categoria": "SED",
+    "precio_unitario": 60.0,
+    "codigo_sap": "300775"
+  },
+  {
+    "codigo": "SED-036",
+    "descripcion": "Liberación y normalización de SED",
+    "unidad": "SED",
+    "categoria": "SED",
+    "precio_unitario": 150.0,
+    "codigo_sap": "300756"
+  },
+  {
+    "codigo": "SED-037",
+    "descripcion": "Cambio de Fusibles",
+    "unidad": "Cjto",
+    "categoria": "SED",
+    "precio_unitario": 50.0,
+    "codigo_sap": "300664"
+  },
+  {
+    "codigo": "SED-038",
+    "descripcion": "Cambio de Fusibles Fuse Power  o tipo HH",
+    "unidad": "Cjto",
+    "categoria": "SED",
+    "precio_unitario": 120.0,
+    "codigo_sap": "300746"
+  },
+  {
+    "codigo": "SED-039",
+    "descripcion": "Apertura/cierre de interruptor termomagnético en TD",
+    "unidad": "SED",
+    "categoria": "SED",
+    "precio_unitario": 60.0,
+    "codigo_sap": "300730"
+  }
+]

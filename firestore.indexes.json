@@ -1,0 +1,70 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "ordenes_mantenimiento",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "cuadrillas_ids", "arrayConfig": "CONTAINS" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "items_om",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "orden_id", "order": "ASCENDING" },
+        { "fieldPath": "cuadrilla_id", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "items_om",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "cuadrilla_id", "order": "ASCENDING" },
+        { "fieldPath": "fecha_ejecucion", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "items_om",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "cuadrilla_id", "order": "ASCENDING" },
+        { "fieldPath": "fecha_ejecucion", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "trabajos_libres",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "cuadrilla_id", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "trabajos_libres",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "cuadrilla_id", "order": "ASCENDING" },
+        { "fieldPath": "fecha", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "items_tl",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "trabajo_libre_id", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "items_om",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "orden_id", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
