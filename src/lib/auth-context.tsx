@@ -28,7 +28,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(firebaseUser);
       if (firebaseUser) {
         const snap = await getDoc(doc(db, 'users', firebaseUser.uid));
-        if (snap.exists()) setUserData({ uid: firebaseUser.uid, ...snap.data() } as Usuario);
+        if (snap.exists()) {
+          const data = snap.data();
+          if (data.activo === false) {
+            await signOut(auth);
+            setUser(null);
+            setUserData(null);
+            setLoading(false);
+            return;
+          }
+          setUserData({ uid: firebaseUser.uid, ...data } as Usuario);
+        }
       } else {
         setUserData(null);
       }

@@ -1,12 +1,12 @@
 import {
   collection, doc, addDoc, updateDoc, getDoc, getDocs,
-  query, where, onSnapshot,
+  query, where, onSnapshot, setDoc,
   writeBatch
 } from 'firebase/firestore';
 import { db } from './firebase';
 import {
   Cuadrilla, Partida, OrdenMantenimiento, ItemOM,
-  TrabajoLibre, ItemTL
+  TrabajoLibre, ItemTL, Usuario
 } from '@/types';
 
 // ─── Helper: sort client-side ─────────────────────────────────────────────────
@@ -359,4 +359,19 @@ export async function getTLsGlobalDelMes(mes: number, anio: number): Promise<Tra
   return snap.docs
     .map(d => ({ id: d.id, ...d.data() } as TrabajoLibre))
     .filter(t => t.fecha >= inicio && t.fecha < fin);
+}
+
+// ─── GESTIÓN DE USUARIOS ──────────────────────────────────────────────────────
+export async function getSupervisores(): Promise<Usuario[]> {
+  const q = query(collection(db, 'users'), where('rol', '==', 'supervisor'));
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({ uid: d.id, ...d.data() } as Usuario));
+}
+
+export async function toggleActivoUsuario(uid: string, activo: boolean): Promise<void> {
+  await updateDoc(doc(db, 'users', uid), { activo });
+}
+
+export async function crearDocumentoUsuario(uid: string, data: Omit<Usuario, 'uid'>): Promise<void> {
+  await setDoc(doc(db, 'users', uid), { ...data, createdAt: new Date().toISOString() });
 }

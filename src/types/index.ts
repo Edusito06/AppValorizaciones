@@ -11,6 +11,8 @@ export interface Usuario {
   cuadrillaId?: string;
   cuadrillaNombre?: string;
   provincia?: string;
+  activo?: boolean;
+  createdAt?: string;
 }
 
 export interface Cuadrilla {
