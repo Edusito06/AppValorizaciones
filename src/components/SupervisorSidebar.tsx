@@ -25,7 +25,7 @@ const navItems = [
   )},
 ];
 
-export default function SupervisorSidebar() {
+export default function SupervisorSidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) {
   const pathname = usePathname();
   const router = useRouter();
   const { userData, logout } = useAuth();
@@ -37,7 +37,7 @@ export default function SupervisorSidebar() {
   };
 
   return (
-    <nav className="sidebar">
+    <nav className={`sidebar${isOpen ? ' sidebar-open' : ''}`}>
       <div className="sidebar-logo">
         <div className="sidebar-logo-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -54,6 +54,7 @@ export default function SupervisorSidebar() {
           <Link
             key={item.href}
             href={item.href}
+            onClick={onClose}
             className={`nav-item ${pathname === item.href || (item.href !== '/supervisor/dashboard' && pathname.startsWith(item.href) && item.href.split('/').length > 3) ? 'active' : pathname === item.href ? 'active' : ''}`}
           >
             <span className="nav-icon">{item.icon}</span>

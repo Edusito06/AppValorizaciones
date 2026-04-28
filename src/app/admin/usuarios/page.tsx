@@ -57,8 +57,8 @@ export default function UsuariosPage() {
         setLoading(false);
       })
       .catch(err => {
-        console.error('Error al cargar supervisores:', err);
-        setError('No se pudieron cargar los supervisores. Verifica tu conexión o los permisos de Firestore.');
+        console.error('Error al cargar supervisores:', err?.code, err?.message, err);
+        setError(`${err?.code || 'unknown'}: ${err?.message || 'Error desconocido'}`);
         setLoading(false);
       });
   }, []);
