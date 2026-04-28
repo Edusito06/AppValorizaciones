@@ -4,6 +4,7 @@ import { getCuadrillas, getSupervisores, toggleActivoUsuario, crearDocumentoUsua
 import { Usuario, Cuadrilla } from '@/types';
 import toast from 'react-hot-toast';
 
+// ─── Componentes reutilizables ────────────────────────────────────────────────
 function Badge({ activo }: { activo?: boolean }) {
   const ok = activo !== false;
   return (
@@ -20,6 +21,35 @@ function Badge({ activo }: { activo?: boolean }) {
   );
 }
 
+// ─── Dialog de confirmación personalizado ─────────────────────────────────────
+function ConfirmDialog({ mensaje, onConfirm, onCancel }: {
+  mensaje: string; onConfirm: () => void; onCancel: () => void;
+}) {
+  return (
+    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9999, background: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+      <div className="card-gradient fade-in" style={{ width: '100%', maxWidth: 380, padding: 28 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+          <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(245,158,11,0.15)', border: '1px solid rgba(245,158,11,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div>
+            <p style={{ fontSize: 15, fontWeight: 700, color: '#e2e8f0', marginBottom: 4 }}>Confirmar acción</p>
+            <p style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.5 }}>{mensaje}</p>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
+          <button onClick={onCancel} style={{ flex: 1, padding: '10px 16px', borderRadius: 10, border: '1px solid rgba(100,116,139,0.3)', background: 'transparent', color: '#94a3b8', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
+            Cancelar
+          </button>
+          <button onClick={onConfirm} className="btn-primary" style={{ flex: 1, justifyContent: 'center', padding: '10px 16px' }}>
+            Confirmar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const PROVINCIAS = ['Tarma', 'Huancayo', 'Junín', 'Chanchamayo'];
 
 export default function UsuariosPage() {
@@ -33,6 +63,7 @@ export default function UsuariosPage() {
   const [guardando, setGuardando] = useState(false);
   const [filtro, setFiltro] = useState('');
   const [isMobile, setIsMobile] = useState(false);
+  const [confirm, setConfirm] = useState<{ mensaje: string; onConfirm: () => void } | null>(null);
 
   const [form, setForm] = useState({
     nombre: '', email: '', password: '', confirmarPassword: '',
@@ -40,7 +71,6 @@ export default function UsuariosPage() {
   });
 
   const modalRef = useRef<HTMLDivElement>(null);
-  const detalleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -57,7 +87,7 @@ export default function UsuariosPage() {
         setLoading(false);
       })
       .catch(err => {
-        console.error('Error al cargar supervisores:', err?.code, err?.message, err);
+        console.error('Error al cargar supervisores:', err?.code, err?.message);
         setError(`${err?.code || 'unknown'}: ${err?.message || 'Error desconocido'}`);
         setLoading(false);
       });
@@ -74,24 +104,13 @@ export default function UsuariosPage() {
     return () => document.removeEventListener('mousedown', handler);
   }, [showModal]);
 
-  useEffect(() => {
-    if (!showDetalle || !isMobile) return;
-    const handler = (e: MouseEvent) => {
-      if (detalleRef.current && !detalleRef.current.contains(e.target as Node)) {
-        setShowDetalle(false);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [showDetalle, isMobile]);
-
   function resetForm() {
     setForm({ nombre: '', email: '', password: '', confirmarPassword: '', cuadrillaId: '', provincia: '' });
   }
 
   function abrirDetalle(sup: Usuario) {
     setSelected(sup);
-    if (isMobile) setShowDetalle(true);
+    setShowDetalle(true);
   }
 
   const supsFiltrados = supervisores.filter(s =>
@@ -101,18 +120,29 @@ export default function UsuariosPage() {
     (s.provincia || '').toLowerCase().includes(filtro.toLowerCase())
   );
 
-  async function handleToggleActivo(sup: Usuario) {
+  function pedirConfirm(mensaje: string, onConfirm: () => void) {
+    setConfirm({ mensaje, onConfirm });
+  }
+
+  async function ejecutarToggleActivo(sup: Usuario) {
     const nuevoEstado = sup.activo === false ? true : false;
-    const accion = nuevoEstado ? 'activar' : 'desactivar';
-    if (!confirm(`¿Seguro que deseas ${accion} la cuenta de ${sup.nombre}?`)) return;
     try {
       await toggleActivoUsuario(sup.uid, nuevoEstado);
       setSupervisores(prev => prev.map(s => s.uid === sup.uid ? { ...s, activo: nuevoEstado } : s));
-      if (selected?.uid === sup.uid) setSelected({ ...selected, activo: nuevoEstado });
+      if (selected?.uid === sup.uid) setSelected(prev => prev ? { ...prev, activo: nuevoEstado } : null);
       toast.success(`Cuenta ${nuevoEstado ? 'activada' : 'desactivada'} correctamente`);
     } catch {
       toast.error('Error al actualizar el estado de la cuenta');
     }
+  }
+
+  function handleToggleActivo(sup: Usuario) {
+    const nuevoEstado = sup.activo === false ? true : false;
+    const accion = nuevoEstado ? 'activar' : 'desactivar';
+    pedirConfirm(
+      `¿Estás seguro de que deseas ${accion} la cuenta de ${sup.nombre}?`,
+      () => ejecutarToggleActivo(sup)
+    );
   }
 
   async function handleCrear(e: React.FormEvent) {
@@ -131,21 +161,17 @@ export default function UsuariosPage() {
 
       const cuadrilla = cuadrillas.find(c => c.id === form.cuadrillaId)!;
       await crearDocumentoUsuario(data.uid, {
-        nombre: form.nombre.trim(),
-        email: form.email.trim(),
-        rol: 'supervisor',
-        cuadrillaId: cuadrilla.id,
-        cuadrillaNombre: cuadrilla.nombre,
-        provincia: cuadrilla.provincia,
-        activo: true,
+        nombre: form.nombre.trim(), email: form.email.trim(), rol: 'supervisor',
+        cuadrillaId: cuadrilla.id, cuadrillaNombre: cuadrilla.nombre,
+        provincia: cuadrilla.provincia, activo: true,
       });
 
-      const nuevo: Usuario = {
+      setSupervisores(prev => [...prev, {
         uid: data.uid, nombre: form.nombre.trim(), email: form.email.trim(),
-        rol: 'supervisor', cuadrillaId: cuadrilla.id, cuadrillaNombre: cuadrilla.nombre,
+        rol: 'supervisor' as const, cuadrillaId: cuadrilla.id, cuadrillaNombre: cuadrilla.nombre,
         provincia: cuadrilla.provincia, activo: true, createdAt: new Date().toISOString(),
-      };
-      setSupervisores(prev => [...prev, nuevo].sort((a, b) => a.nombre.localeCompare(b.nombre)));
+      }].sort((a, b) => a.nombre.localeCompare(b.nombre)));
+
       toast.success(`Supervisor ${form.nombre} creado correctamente`);
       setShowModal(false); resetForm();
     } catch {
@@ -155,7 +181,7 @@ export default function UsuariosPage() {
     }
   }
 
-  // ─── Estados de carga y error ─────────────────────────────────────────────────
+  // ─── Estados carga / error ────────────────────────────────────────────────────
   if (loading) return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 'calc(100vh - 120px)' }}>
       <div style={{ textAlign: 'center' }}>
@@ -176,14 +202,14 @@ export default function UsuariosPage() {
     </div>
   );
 
-  // ─── Panel de detalle (reutilizado en desktop y como modal en móvil) ──────────
-  const DetallePanel = ({ sup }: { sup: Usuario }) => (
-    <div style={{ padding: 24 }}>
+  // ─── Panel de detalle (compartido móvil/desktop) ──────────────────────────────
+  const DetalleContent = ({ sup }: { sup: Usuario }) => (
+    <>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <h3 style={{ fontSize: 15, fontWeight: 700, color: '#e2e8f0' }}>Perfil del Supervisor</h3>
         <button onClick={() => { setSelected(null); setShowDetalle(false); }}
           style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b', padding: 4 }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
       <div style={{ textAlign: 'center', marginBottom: 20 }}>
@@ -194,31 +220,40 @@ export default function UsuariosPage() {
         <div style={{ marginTop: 6 }}><Badge activo={sup.activo} /></div>
       </div>
       {[
-        { label: 'Correo electrónico', value: sup.email, icon: '✉️' },
+        { label: 'Correo', value: sup.email, icon: '✉️' },
         { label: 'Cuadrilla', value: sup.cuadrillaNombre || '—', icon: '👷' },
         { label: 'Provincia', value: sup.provincia || '—', icon: '📍' },
         { label: 'Rol', value: 'Supervisor', icon: '🔑' },
         { label: 'Registrado', value: sup.createdAt ? new Date(sup.createdAt).toLocaleDateString('es-PE', { day: '2-digit', month: 'long', year: 'numeric' }) : '—', icon: '📅' },
       ].map(({ label, value, icon }) => (
-        <div key={label} style={{ marginBottom: 12, padding: '10px 14px', background: 'rgba(5,16,31,0.5)', borderRadius: 10, border: '1px solid rgba(59,130,246,0.1)' }}>
+        <div key={label} style={{ marginBottom: 10, padding: '10px 14px', background: 'rgba(5,16,31,0.5)', borderRadius: 10, border: '1px solid rgba(59,130,246,0.1)' }}>
           <p style={{ fontSize: 10, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>{icon} {label}</p>
           <p style={{ fontSize: 13, color: '#e2e8f0', wordBreak: 'break-all' }}>{value}</p>
         </div>
       ))}
       <button onClick={() => handleToggleActivo(sup)}
         className={sup.activo !== false ? 'btn-danger' : 'btn-primary'}
-        style={{ width: '100%', justifyContent: 'center', marginTop: 8, padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+        style={{ width: '100%', justifyContent: 'center', marginTop: 10, padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
         {sup.activo !== false
           ? <><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>Desactivar cuenta</>
           : <><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>Activar cuenta</>
         }
       </button>
-    </div>
+    </>
   );
 
-  // ─── Render ───────────────────────────────────────────────────────────────────
+  // ─── Render principal ─────────────────────────────────────────────────────────
   return (
     <div className="page-content fade-in">
+
+      {/* Dialog de confirmación personalizado */}
+      {confirm && (
+        <ConfirmDialog
+          mensaje={confirm.mensaje}
+          onConfirm={() => { confirm.onConfirm(); setConfirm(null); }}
+          onCancel={() => setConfirm(null)}
+        />
+      )}
 
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
@@ -240,11 +275,9 @@ export default function UsuariosPage() {
 
       <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
 
-        {/* ── Lista / Tabla ── */}
+        {/* Lista */}
         <div style={{ flex: 1, minWidth: 0 }}>
-
           {isMobile ? (
-            /* ── Móvil: cards ── */
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {supsFiltrados.length === 0 ? (
                 <div className="card-gradient" style={{ padding: 40, textAlign: 'center', color: '#64748b', fontSize: 14 }}>
@@ -276,7 +309,6 @@ export default function UsuariosPage() {
               ))}
             </div>
           ) : (
-            /* ── Desktop: tabla ── */
             <div className="card-gradient" style={{ overflow: 'hidden', padding: 0 }}>
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
@@ -289,7 +321,7 @@ export default function UsuariosPage() {
                 <tbody>
                   {supsFiltrados.length === 0 ? (
                     <tr><td colSpan={5} style={{ padding: 40, textAlign: 'center', color: '#64748b', fontSize: 14 }}>
-                      {filtro ? 'Sin resultados para esa búsqueda' : 'No hay supervisores registrados'}
+                      {filtro ? 'Sin resultados' : 'No hay supervisores registrados'}
                     </td></tr>
                   ) : supsFiltrados.map((sup, i) => (
                     <tr key={sup.uid} style={{ borderBottom: i < supsFiltrados.length - 1 ? '1px solid rgba(59,130,246,0.08)' : 'none', background: selected?.uid === sup.uid ? 'rgba(139,92,246,0.06)' : 'transparent', transition: 'background 0.15s' }}>
@@ -309,12 +341,12 @@ export default function UsuariosPage() {
                       <td style={{ padding: '14px 16px' }}><Badge activo={sup.activo} /></td>
                       <td style={{ padding: '14px 16px' }}>
                         <div style={{ display: 'flex', gap: 8 }}>
-                          <button onClick={() => setSelected(selected?.uid === sup.uid ? null : sup)}
-                            style={{ padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer', background: selected?.uid === sup.uid ? 'rgba(139,92,246,0.2)' : 'rgba(139,92,246,0.08)', border: '1px solid rgba(139,92,246,0.3)', color: '#a78bfa', transition: 'all 0.15s' }}>
+                          <button onClick={() => selected?.uid === sup.uid ? setSelected(null) : abrirDetalle(sup)}
+                            style={{ padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer', background: selected?.uid === sup.uid ? 'rgba(139,92,246,0.2)' : 'rgba(139,92,246,0.08)', border: '1px solid rgba(139,92,246,0.3)', color: '#a78bfa' }}>
                             {selected?.uid === sup.uid ? 'Cerrar' : 'Ver detalle'}
                           </button>
                           <button onClick={() => handleToggleActivo(sup)}
-                            style={{ padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer', background: sup.activo !== false ? 'rgba(239,68,68,0.08)' : 'rgba(16,185,129,0.08)', border: `1px solid ${sup.activo !== false ? 'rgba(239,68,68,0.3)' : 'rgba(16,185,129,0.3)'}`, color: sup.activo !== false ? '#f87171' : '#10b981', transition: 'all 0.15s' }}>
+                            style={{ padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer', background: sup.activo !== false ? 'rgba(239,68,68,0.08)' : 'rgba(16,185,129,0.08)', border: `1px solid ${sup.activo !== false ? 'rgba(239,68,68,0.3)' : 'rgba(16,185,129,0.3)'}`, color: sup.activo !== false ? '#f87171' : '#10b981' }}>
                             {sup.activo !== false ? 'Desactivar' : 'Activar'}
                           </button>
                         </div>
@@ -327,28 +359,38 @@ export default function UsuariosPage() {
           )}
         </div>
 
-        {/* ── Panel detalle desktop ── */}
+        {/* Panel detalle desktop */}
         {!isMobile && selected && (
-          <div className="card-gradient fade-in" style={{ width: 300, flexShrink: 0 }}>
-            <DetallePanel sup={selected} />
+          <div className="card-gradient fade-in" style={{ width: 300, flexShrink: 0, padding: 24 }}>
+            <DetalleContent sup={selected} />
           </div>
         )}
       </div>
 
-      {/* ── Modal detalle móvil ── */}
+      {/* ── Modal detalle móvil (bottom-sheet) ── */}
       {isMobile && showDetalle && selected && (
-        <div style={{ position: 'fixed', inset: 0, zIndex: 55, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'flex-end' }}>
-          <div ref={detalleRef} className="card-gradient fade-in" style={{ width: '100%', maxHeight: '85vh', overflowY: 'auto', borderRadius: '20px 20px 0 0' }}>
-            <div style={{ width: 36, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.15)', margin: '12px auto 0' }} />
-            <DetallePanel sup={selected} />
+        <div
+          onClick={() => { setShowDetalle(false); setSelected(null); }}
+          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9998, background: 'rgba(0,0,0,0.75)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            className="fade-in"
+            style={{ background: 'linear-gradient(135deg,rgba(13,31,60,0.99) 0%,rgba(5,16,31,0.99) 100%)', border: '1px solid rgba(59,130,246,0.18)', borderRadius: '20px 20px 0 0', maxHeight: '88vh', overflowY: 'auto', padding: 24 }}
+          >
+            <div style={{ width: 36, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.15)', margin: '0 auto 20px' }} />
+            <DetalleContent sup={selected} />
           </div>
         </div>
       )}
 
       {/* ── Modal crear supervisor ── */}
       {showModal && (
-        <div style={{ position: 'fixed', inset: 0, zIndex: 55, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
-          <div ref={modalRef} className="card-gradient fade-in" style={{ width: '100%', maxWidth: 480, padding: isMobile ? 20 : 32, maxHeight: '90vh', overflowY: 'auto' }}>
+        <div
+          onClick={e => { if (e.target === e.currentTarget) { setShowModal(false); resetForm(); } }}
+          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9998, background: 'rgba(0,0,0,0.75)', overflowY: 'auto', padding: isMobile ? '16px 16px 32px' : '24px', display: 'flex', alignItems: isMobile ? 'flex-start' : 'center', justifyContent: 'center' }}
+        >
+          <div ref={modalRef} className="card-gradient fade-in" style={{ width: '100%', maxWidth: 480, padding: isMobile ? 20 : 32, marginTop: isMobile ? 0 : 'auto', marginBottom: isMobile ? 0 : 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
               <h2 style={{ fontSize: 18, fontWeight: 700, color: '#e2e8f0' }}>Nuevo Supervisor</h2>
               <button onClick={() => { setShowModal(false); resetForm(); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}>
