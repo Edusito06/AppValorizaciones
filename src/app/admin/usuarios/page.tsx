@@ -104,6 +104,13 @@ export default function UsuariosPage() {
     return () => document.removeEventListener('mousedown', handler);
   }, [showModal]);
 
+  // Bloquea scroll del body cuando hay modal o bottom-sheet abierto
+  useEffect(() => {
+    const locked = showModal || (isMobile && showDetalle);
+    document.body.style.overflow = locked ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [showModal, showDetalle, isMobile]);
+
   function resetForm() {
     setForm({ nombre: '', email: '', password: '', confirmarPassword: '', cuadrillaId: '', provincia: '' });
   }
@@ -361,7 +368,7 @@ export default function UsuariosPage() {
 
         {/* Panel detalle desktop */}
         {!isMobile && selected && (
-          <div className="card-gradient fade-in" style={{ width: 300, flexShrink: 0, padding: 24 }}>
+          <div className="card-gradient fade-in" style={{ width: 300, flexShrink: 0, padding: 24, position: 'sticky', top: 32, alignSelf: 'flex-start', maxHeight: 'calc(100vh - 64px)', overflowY: 'auto' }}>
             <DetalleContent sup={selected} />
           </div>
         )}
@@ -388,9 +395,9 @@ export default function UsuariosPage() {
       {showModal && (
         <div
           onClick={e => { if (e.target === e.currentTarget) { setShowModal(false); resetForm(); } }}
-          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9998, background: 'rgba(0,0,0,0.75)', overflowY: 'auto', padding: isMobile ? '16px 16px 32px' : '24px', display: 'flex', alignItems: isMobile ? 'flex-start' : 'center', justifyContent: 'center' }}
+          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9998, background: 'rgba(0,0,0,0.75)', overflow: 'hidden', padding: isMobile ? '16px 16px 32px' : '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
-          <div ref={modalRef} className="card-gradient fade-in" style={{ width: '100%', maxWidth: 480, padding: isMobile ? 20 : 32, marginTop: isMobile ? 0 : 'auto', marginBottom: isMobile ? 0 : 'auto' }}>
+          <div ref={modalRef} className="card-gradient fade-in" style={{ width: '100%', maxWidth: 480, padding: isMobile ? 20 : 32, maxHeight: 'calc(100vh - 48px)', overflowY: 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
               <h2 style={{ fontSize: 18, fontWeight: 700, color: '#e2e8f0' }}>Nuevo Supervisor</h2>
               <button onClick={() => { setShowModal(false); resetForm(); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}>
