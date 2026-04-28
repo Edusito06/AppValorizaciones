@@ -19,7 +19,7 @@ const navItems = [
   )},
 ];
 
-export default function AdminSidebar() {
+export default function AdminSidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) {
   const pathname = usePathname();
   const router = useRouter();
   const { userData, logout } = useAuth();
@@ -31,7 +31,7 @@ export default function AdminSidebar() {
   };
 
   return (
-    <nav className="sidebar">
+    <nav className={`sidebar${isOpen ? ' sidebar-open' : ''}`}>
       <div className="sidebar-logo">
         <div style={{
           width:42, height:42, borderRadius:12,
@@ -50,7 +50,7 @@ export default function AdminSidebar() {
       <div className="sidebar-nav">
         <p className="nav-section-title">Administración</p>
         {navItems.map(item => (
-          <Link key={item.href} href={item.href}
+          <Link key={item.href} href={item.href} onClick={onClose}
             className={`nav-item ${pathname.startsWith(item.href) ? 'active' : ''}`}>
             <span className="nav-icon">{item.icon}</span>
             {item.label}

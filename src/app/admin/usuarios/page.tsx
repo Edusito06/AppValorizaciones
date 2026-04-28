@@ -26,42 +26,72 @@ export default function UsuariosPage() {
   const [supervisores, setSupervisores] = useState<Usuario[]>([]);
   const [cuadrillas, setCuadrillas] = useState<Cuadrilla[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [selected, setSelected] = useState<Usuario | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [showDetalle, setShowDetalle] = useState(false);
   const [guardando, setGuardando] = useState(false);
   const [filtro, setFiltro] = useState('');
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Form crear usuario
   const [form, setForm] = useState({
     nombre: '', email: '', password: '', confirmarPassword: '',
     cuadrillaId: '', provincia: '',
   });
 
   const modalRef = useRef<HTMLDivElement>(null);
+  const detalleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    Promise.all([getSupervisores(), getCuadrillas()]).then(([sups, cuads]) => {
-      setSupervisores(sups.sort((a, b) => a.nombre.localeCompare(b.nombre)));
-      setCuadrillas(cuads.sort((a, b) => a.nombre.localeCompare(b.nombre)));
-      setLoading(false);
-    });
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
   }, []);
 
-  // Cierra modal al hacer clic afuera
+  useEffect(() => {
+    Promise.all([getSupervisores(), getCuadrillas()])
+      .then(([sups, cuads]) => {
+        setSupervisores(sups.sort((a, b) => a.nombre.localeCompare(b.nombre)));
+        setCuadrillas(cuads.sort((a, b) => a.nombre.localeCompare(b.nombre)));
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error al cargar supervisores:', err);
+        setError('No se pudieron cargar los supervisores. Verifica tu conexión o los permisos de Firestore.');
+        setLoading(false);
+      });
+  }, []);
+
   useEffect(() => {
     if (!showModal) return;
     const handler = (e: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-        setShowModal(false);
-        resetForm();
+        setShowModal(false); resetForm();
       }
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, [showModal]);
 
+  useEffect(() => {
+    if (!showDetalle || !isMobile) return;
+    const handler = (e: MouseEvent) => {
+      if (detalleRef.current && !detalleRef.current.contains(e.target as Node)) {
+        setShowDetalle(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [showDetalle, isMobile]);
+
   function resetForm() {
     setForm({ nombre: '', email: '', password: '', confirmarPassword: '', cuadrillaId: '', provincia: '' });
+  }
+
+  function abrirDetalle(sup: Usuario) {
+    setSelected(sup);
+    if (isMobile) setShowDetalle(true);
   }
 
   const supsFiltrados = supervisores.filter(s =>
@@ -87,17 +117,10 @@ export default function UsuariosPage() {
 
   async function handleCrear(e: React.FormEvent) {
     e.preventDefault();
-    if (form.password !== form.confirmarPassword) {
-      toast.error('Las contraseñas no coinciden');
-      return;
-    }
-    if (!form.cuadrillaId) {
-      toast.error('Selecciona una cuadrilla');
-      return;
-    }
+    if (form.password !== form.confirmarPassword) { toast.error('Las contraseñas no coinciden'); return; }
+    if (!form.cuadrillaId) { toast.error('Selecciona una cuadrilla'); return; }
     setGuardando(true);
     try {
-      // 1 — Crear cuenta en Firebase Auth (server-side para no cerrar sesión del admin)
       const res = await fetch('/api/admin/create-user', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -107,8 +130,6 @@ export default function UsuariosPage() {
       if (!res.ok) { toast.error(data.error); setGuardando(false); return; }
 
       const cuadrilla = cuadrillas.find(c => c.id === form.cuadrillaId)!;
-
-      // 2 — Crear documento en Firestore (client-side con permisos de superadmin)
       await crearDocumentoUsuario(data.uid, {
         nombre: form.nombre.trim(),
         email: form.email.trim(),
@@ -120,20 +141,13 @@ export default function UsuariosPage() {
       });
 
       const nuevo: Usuario = {
-        uid: data.uid,
-        nombre: form.nombre.trim(),
-        email: form.email.trim(),
-        rol: 'supervisor',
-        cuadrillaId: cuadrilla.id,
-        cuadrillaNombre: cuadrilla.nombre,
-        provincia: cuadrilla.provincia,
-        activo: true,
-        createdAt: new Date().toISOString(),
+        uid: data.uid, nombre: form.nombre.trim(), email: form.email.trim(),
+        rol: 'supervisor', cuadrillaId: cuadrilla.id, cuadrillaNombre: cuadrilla.nombre,
+        provincia: cuadrilla.provincia, activo: true, createdAt: new Date().toISOString(),
       };
       setSupervisores(prev => [...prev, nuevo].sort((a, b) => a.nombre.localeCompare(b.nombre)));
       toast.success(`Supervisor ${form.nombre} creado correctamente`);
-      setShowModal(false);
-      resetForm();
+      setShowModal(false); resetForm();
     } catch {
       toast.error('Error al crear el supervisor');
     } finally {
@@ -141,220 +155,228 @@ export default function UsuariosPage() {
     }
   }
 
-  if (loading) {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
-        <div style={{ textAlign: 'center' }}>
-          <div className="loading-spinner" style={{ width: 36, height: 36, borderWidth: 3, margin: '0 auto 12px' }} />
-          <p style={{ color: '#64748b', fontSize: 14 }}>Cargando supervisores...</p>
-        </div>
+  // ─── Estados de carga y error ─────────────────────────────────────────────────
+  if (loading) return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 'calc(100vh - 120px)' }}>
+      <div style={{ textAlign: 'center' }}>
+        <div className="loading-spinner" style={{ width: 40, height: 40, borderWidth: 3, margin: '0 auto 16px' }} />
+        <p style={{ color: '#64748b', fontSize: 14 }}>Cargando supervisores...</p>
       </div>
-    );
-  }
+    </div>
+  );
 
+  if (error) return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 'calc(100vh - 120px)' }}>
+      <div style={{ textAlign: 'center', maxWidth: 400, padding: 24 }}>
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="1.5" style={{ margin: '0 auto 16px', display: 'block', opacity: 0.7 }}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <p style={{ color: '#f87171', fontSize: 15, fontWeight: 600, marginBottom: 8 }}>Error al cargar</p>
+        <p style={{ color: '#64748b', fontSize: 13, marginBottom: 20 }}>{error}</p>
+        <button className="btn-primary" onClick={() => window.location.reload()}>Reintentar</button>
+      </div>
+    </div>
+  );
+
+  // ─── Panel de detalle (reutilizado en desktop y como modal en móvil) ──────────
+  const DetallePanel = ({ sup }: { sup: Usuario }) => (
+    <div style={{ padding: 24 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+        <h3 style={{ fontSize: 15, fontWeight: 700, color: '#e2e8f0' }}>Perfil del Supervisor</h3>
+        <button onClick={() => { setSelected(null); setShowDetalle(false); }}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b', padding: 4 }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div style={{ textAlign: 'center', marginBottom: 20 }}>
+        <div style={{ width: 64, height: 64, borderRadius: 18, margin: '0 auto 12px', background: 'linear-gradient(135deg,rgba(139,92,246,0.3),rgba(109,40,217,0.3))', border: '2px solid rgba(139,92,246,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <p style={{ fontSize: 15, fontWeight: 700, color: '#e2e8f0' }}>{sup.nombre}</p>
+        <div style={{ marginTop: 6 }}><Badge activo={sup.activo} /></div>
+      </div>
+      {[
+        { label: 'Correo electrónico', value: sup.email, icon: '✉️' },
+        { label: 'Cuadrilla', value: sup.cuadrillaNombre || '—', icon: '👷' },
+        { label: 'Provincia', value: sup.provincia || '—', icon: '📍' },
+        { label: 'Rol', value: 'Supervisor', icon: '🔑' },
+        { label: 'Registrado', value: sup.createdAt ? new Date(sup.createdAt).toLocaleDateString('es-PE', { day: '2-digit', month: 'long', year: 'numeric' }) : '—', icon: '📅' },
+      ].map(({ label, value, icon }) => (
+        <div key={label} style={{ marginBottom: 12, padding: '10px 14px', background: 'rgba(5,16,31,0.5)', borderRadius: 10, border: '1px solid rgba(59,130,246,0.1)' }}>
+          <p style={{ fontSize: 10, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>{icon} {label}</p>
+          <p style={{ fontSize: 13, color: '#e2e8f0', wordBreak: 'break-all' }}>{value}</p>
+        </div>
+      ))}
+      <button onClick={() => handleToggleActivo(sup)}
+        className={sup.activo !== false ? 'btn-danger' : 'btn-primary'}
+        style={{ width: '100%', justifyContent: 'center', marginTop: 8, padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+        {sup.activo !== false
+          ? <><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>Desactivar cuenta</>
+          : <><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>Activar cuenta</>
+        }
+      </button>
+    </div>
+  );
+
+  // ─── Render ───────────────────────────────────────────────────────────────────
   return (
     <div className="page-content fade-in">
 
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 28, flexWrap: 'wrap', gap: 16 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <h1 style={{ fontSize: 26, fontWeight: 800, color: '#e2e8f0', marginBottom: 4 }}>Gestión de Supervisores</h1>
-          <p style={{ color: '#64748b', fontSize: 14 }}>{supervisores.length} supervisores registrados · {supervisores.filter(s => s.activo !== false).length} activos</p>
+          <h1 style={{ fontSize: isMobile ? 20 : 26, fontWeight: 800, color: '#e2e8f0', marginBottom: 4 }}>Gestión de Supervisores</h1>
+          <p style={{ color: '#64748b', fontSize: 13 }}>{supervisores.length} registrados · {supervisores.filter(s => s.activo !== false).length} activos</p>
         </div>
-        <button onClick={() => setShowModal(true)} className="btn-primary" style={{ padding: '11px 20px' }}>
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <button onClick={() => setShowModal(true)} className="btn-primary" style={{ padding: '10px 16px', fontSize: 13 }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Nuevo Supervisor
         </button>
       </div>
 
-      <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
+      {/* Buscador */}
+      <div style={{ marginBottom: 16 }}>
+        <input className="input-field" placeholder="Buscar por nombre, email, cuadrilla o provincia..."
+          value={filtro} onChange={e => setFiltro(e.target.value)} />
+      </div>
 
-        {/* Tabla */}
+      <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
+
+        {/* ── Lista / Tabla ── */}
         <div style={{ flex: 1, minWidth: 0 }}>
-          {/* Buscador */}
-          <div style={{ marginBottom: 16 }}>
-            <input
-              className="input-field"
-              placeholder="Buscar por nombre, email, cuadrilla o provincia..."
-              value={filtro}
-              onChange={e => setFiltro(e.target.value)}
-              style={{ maxWidth: 420 }}
-            />
-          </div>
 
-          <div className="card-gradient" style={{ overflow: 'hidden', padding: 0 }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-              <thead>
-                <tr style={{ borderBottom: '1px solid rgba(59,130,246,0.15)' }}>
-                  {['Supervisor', 'Cuadrilla', 'Provincia', 'Estado', 'Acciones'].map(h => (
-                    <th key={h} style={{ padding: '14px 16px', textAlign: 'left', fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {supsFiltrados.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} style={{ padding: 40, textAlign: 'center', color: '#64748b', fontSize: 14 }}>
+          {isMobile ? (
+            /* ── Móvil: cards ── */
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {supsFiltrados.length === 0 ? (
+                <div className="card-gradient" style={{ padding: 40, textAlign: 'center', color: '#64748b', fontSize: 14 }}>
+                  {filtro ? 'Sin resultados' : 'No hay supervisores registrados'}
+                </div>
+              ) : supsFiltrados.map(sup => (
+                <div key={sup.uid} className="card-gradient" style={{ padding: 16 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
+                      <div style={{ width: 40, height: 40, borderRadius: 12, flexShrink: 0, background: 'linear-gradient(135deg,rgba(139,92,246,0.25),rgba(109,40,217,0.25))', border: '1px solid rgba(139,92,246,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                      </div>
+                      <div style={{ minWidth: 0 }}>
+                        <p style={{ fontSize: 14, fontWeight: 600, color: '#e2e8f0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{sup.nombre}</p>
+                        <p style={{ fontSize: 11, color: '#64748b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{sup.cuadrillaNombre} · {sup.provincia}</p>
+                      </div>
+                    </div>
+                    <Badge activo={sup.activo} />
+                  </div>
+                  <div style={{ display: 'flex', gap: 8, marginTop: 14 }}>
+                    <button onClick={() => abrirDetalle(sup)} style={{ flex: 1, padding: '8px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer', background: 'rgba(139,92,246,0.08)', border: '1px solid rgba(139,92,246,0.3)', color: '#a78bfa' }}>
+                      Ver detalle
+                    </button>
+                    <button onClick={() => handleToggleActivo(sup)} style={{ flex: 1, padding: '8px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer', background: sup.activo !== false ? 'rgba(239,68,68,0.08)' : 'rgba(16,185,129,0.08)', border: `1px solid ${sup.activo !== false ? 'rgba(239,68,68,0.3)' : 'rgba(16,185,129,0.3)'}`, color: sup.activo !== false ? '#f87171' : '#10b981' }}>
+                      {sup.activo !== false ? 'Desactivar' : 'Activar'}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            /* ── Desktop: tabla ── */
+            <div className="card-gradient" style={{ overflow: 'hidden', padding: 0 }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ borderBottom: '1px solid rgba(59,130,246,0.15)' }}>
+                    {['Supervisor', 'Cuadrilla', 'Provincia', 'Estado', 'Acciones'].map(h => (
+                      <th key={h} style={{ padding: '14px 16px', textAlign: 'left', fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {supsFiltrados.length === 0 ? (
+                    <tr><td colSpan={5} style={{ padding: 40, textAlign: 'center', color: '#64748b', fontSize: 14 }}>
                       {filtro ? 'Sin resultados para esa búsqueda' : 'No hay supervisores registrados'}
-                    </td>
-                  </tr>
-                ) : supsFiltrados.map((sup, i) => (
-                  <tr key={sup.uid} style={{
-                    borderBottom: i < supsFiltrados.length - 1 ? '1px solid rgba(59,130,246,0.08)' : 'none',
-                    background: selected?.uid === sup.uid ? 'rgba(139,92,246,0.06)' : 'transparent',
-                    transition: 'background 0.15s',
-                  }}>
-                    <td style={{ padding: '14px 16px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <div style={{
-                          width: 34, height: 34, borderRadius: 10, flexShrink: 0,
-                          background: 'linear-gradient(135deg, rgba(139,92,246,0.25), rgba(109,40,217,0.25))',
-                          border: '1px solid rgba(139,92,246,0.3)',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        }}>
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </td></tr>
+                  ) : supsFiltrados.map((sup, i) => (
+                    <tr key={sup.uid} style={{ borderBottom: i < supsFiltrados.length - 1 ? '1px solid rgba(59,130,246,0.08)' : 'none', background: selected?.uid === sup.uid ? 'rgba(139,92,246,0.06)' : 'transparent', transition: 'background 0.15s' }}>
+                      <td style={{ padding: '14px 16px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                          <div style={{ width: 34, height: 34, borderRadius: 10, flexShrink: 0, background: 'linear-gradient(135deg,rgba(139,92,246,0.25),rgba(109,40,217,0.25))', border: '1px solid rgba(139,92,246,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                          </div>
+                          <div>
+                            <p style={{ fontSize: 13, fontWeight: 600, color: '#e2e8f0' }}>{sup.nombre}</p>
+                            <p style={{ fontSize: 11, color: '#64748b' }}>{sup.email}</p>
+                          </div>
                         </div>
-                        <div>
-                          <p style={{ fontSize: 13, fontWeight: 600, color: '#e2e8f0' }}>{sup.nombre}</p>
-                          <p style={{ fontSize: 11, color: '#64748b' }}>{sup.email}</p>
+                      </td>
+                      <td style={{ padding: '14px 16px', fontSize: 13, color: '#94a3b8' }}>{sup.cuadrillaNombre || '—'}</td>
+                      <td style={{ padding: '14px 16px', fontSize: 13, color: '#94a3b8' }}>{sup.provincia || '—'}</td>
+                      <td style={{ padding: '14px 16px' }}><Badge activo={sup.activo} /></td>
+                      <td style={{ padding: '14px 16px' }}>
+                        <div style={{ display: 'flex', gap: 8 }}>
+                          <button onClick={() => setSelected(selected?.uid === sup.uid ? null : sup)}
+                            style={{ padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer', background: selected?.uid === sup.uid ? 'rgba(139,92,246,0.2)' : 'rgba(139,92,246,0.08)', border: '1px solid rgba(139,92,246,0.3)', color: '#a78bfa', transition: 'all 0.15s' }}>
+                            {selected?.uid === sup.uid ? 'Cerrar' : 'Ver detalle'}
+                          </button>
+                          <button onClick={() => handleToggleActivo(sup)}
+                            style={{ padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer', background: sup.activo !== false ? 'rgba(239,68,68,0.08)' : 'rgba(16,185,129,0.08)', border: `1px solid ${sup.activo !== false ? 'rgba(239,68,68,0.3)' : 'rgba(16,185,129,0.3)'}`, color: sup.activo !== false ? '#f87171' : '#10b981', transition: 'all 0.15s' }}>
+                            {sup.activo !== false ? 'Desactivar' : 'Activar'}
+                          </button>
                         </div>
-                      </div>
-                    </td>
-                    <td style={{ padding: '14px 16px', fontSize: 13, color: '#94a3b8' }}>{sup.cuadrillaNombre || '—'}</td>
-                    <td style={{ padding: '14px 16px', fontSize: 13, color: '#94a3b8' }}>{sup.provincia || '—'}</td>
-                    <td style={{ padding: '14px 16px' }}><Badge activo={sup.activo} /></td>
-                    <td style={{ padding: '14px 16px' }}>
-                      <div style={{ display: 'flex', gap: 8 }}>
-                        <button
-                          onClick={() => setSelected(selected?.uid === sup.uid ? null : sup)}
-                          style={{
-                            padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                            background: selected?.uid === sup.uid ? 'rgba(139,92,246,0.2)' : 'rgba(139,92,246,0.08)',
-                            border: '1px solid rgba(139,92,246,0.3)', color: '#a78bfa', transition: 'all 0.15s',
-                          }}
-                        >
-                          {selected?.uid === sup.uid ? 'Cerrar' : 'Ver detalle'}
-                        </button>
-                        <button
-                          onClick={() => handleToggleActivo(sup)}
-                          style={{
-                            padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                            background: sup.activo !== false ? 'rgba(239,68,68,0.08)' : 'rgba(16,185,129,0.08)',
-                            border: `1px solid ${sup.activo !== false ? 'rgba(239,68,68,0.3)' : 'rgba(16,185,129,0.3)'}`,
-                            color: sup.activo !== false ? '#f87171' : '#10b981', transition: 'all 0.15s',
-                          }}
-                        >
-                          {sup.activo !== false ? 'Desactivar' : 'Activar'}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
 
-        {/* Panel de detalle */}
-        {selected && (
-          <div className="card-gradient fade-in" style={{ width: 300, flexShrink: 0, padding: 24 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <h3 style={{ fontSize: 15, fontWeight: 700, color: '#e2e8f0' }}>Perfil del Supervisor</h3>
-              <button onClick={() => setSelected(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b', padding: 4 }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              </button>
-            </div>
-
-            {/* Avatar */}
-            <div style={{ textAlign: 'center', marginBottom: 20 }}>
-              <div style={{
-                width: 64, height: 64, borderRadius: 18, margin: '0 auto 12px',
-                background: 'linear-gradient(135deg, rgba(139,92,246,0.3), rgba(109,40,217,0.3))',
-                border: '2px solid rgba(139,92,246,0.4)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              </div>
-              <p style={{ fontSize: 15, fontWeight: 700, color: '#e2e8f0' }}>{selected.nombre}</p>
-              <div style={{ marginTop: 6 }}><Badge activo={selected.activo} /></div>
-            </div>
-
-            {/* Datos */}
-            {[
-              { label: 'Correo electrónico', value: selected.email, icon: '✉️' },
-              { label: 'Cuadrilla', value: selected.cuadrillaNombre || '—', icon: '👷' },
-              { label: 'Provincia', value: selected.provincia || '—', icon: '📍' },
-              { label: 'Rol', value: 'Supervisor', icon: '🔑' },
-              {
-                label: 'Registrado',
-                value: selected.createdAt ? new Date(selected.createdAt).toLocaleDateString('es-PE', { day: '2-digit', month: 'long', year: 'numeric' }) : '—',
-                icon: '📅'
-              },
-            ].map(({ label, value, icon }) => (
-              <div key={label} style={{ marginBottom: 14, padding: '10px 14px', background: 'rgba(5,16,31,0.5)', borderRadius: 10, border: '1px solid rgba(59,130,246,0.1)' }}>
-                <p style={{ fontSize: 10, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>{icon} {label}</p>
-                <p style={{ fontSize: 13, color: '#e2e8f0', wordBreak: 'break-all' }}>{value}</p>
-              </div>
-            ))}
-
-            {/* Acción desde panel */}
-            <button
-              onClick={() => handleToggleActivo(selected)}
-              className={selected.activo !== false ? 'btn-danger' : 'btn-primary'}
-              style={{ width: '100%', justifyContent: 'center', marginTop: 8, padding: '10px 16px' }}
-            >
-              {selected.activo !== false ? (
-                <><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>Desactivar cuenta</>
-              ) : (
-                <><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>Activar cuenta</>
-              )}
-            </button>
+        {/* ── Panel detalle desktop ── */}
+        {!isMobile && selected && (
+          <div className="card-gradient fade-in" style={{ width: 300, flexShrink: 0 }}>
+            <DetallePanel sup={selected} />
           </div>
         )}
       </div>
 
-      {/* Modal crear supervisor */}
+      {/* ── Modal detalle móvil ── */}
+      {isMobile && showDetalle && selected && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 55, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'flex-end' }}>
+          <div ref={detalleRef} className="card-gradient fade-in" style={{ width: '100%', maxHeight: '85vh', overflowY: 'auto', borderRadius: '20px 20px 0 0' }}>
+            <div style={{ width: 36, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.15)', margin: '12px auto 0' }} />
+            <DetallePanel sup={selected} />
+          </div>
+        </div>
+      )}
+
+      {/* ── Modal crear supervisor ── */}
       {showModal && (
-        <div style={{
-          position: 'fixed', inset: 0, zIndex: 50,
-          background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
-        }}>
-          <div ref={modalRef} className="card-gradient fade-in" style={{ width: '100%', maxWidth: 480, padding: 32, maxHeight: '90vh', overflowY: 'auto' }}>
+        <div style={{ position: 'fixed', inset: 0, zIndex: 55, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+          <div ref={modalRef} className="card-gradient fade-in" style={{ width: '100%', maxWidth: 480, padding: isMobile ? 20 : 32, maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
               <h2 style={{ fontSize: 18, fontWeight: 700, color: '#e2e8f0' }}>Nuevo Supervisor</h2>
               <button onClick={() => { setShowModal(false); resetForm(); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </button>
             </div>
-
             <form onSubmit={handleCrear}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                 <div>
                   <label className="label">Nombre completo</label>
                   <input className="input-field" placeholder="Ej: Carlos Quispe Huamán" required
                     value={form.nombre} onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))} />
                 </div>
-
                 <div>
                   <label className="label">Correo electrónico</label>
                   <input className="input-field" type="email" placeholder="correo@empresa.pe" required
                     value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
                 </div>
-
                 <div>
                   <label className="label">Contraseña</label>
                   <input className="input-field" type="password" placeholder="Mínimo 6 caracteres" required minLength={6}
                     value={form.password} onChange={e => setForm(f => ({ ...f, password: e.target.value }))} />
                 </div>
-
                 <div>
                   <label className="label">Confirmar contraseña</label>
                   <input className="input-field" type="password" placeholder="Repite la contraseña" required minLength={6}
                     value={form.confirmarPassword} onChange={e => setForm(f => ({ ...f, confirmarPassword: e.target.value }))} />
                 </div>
-
                 <div>
                   <label className="label">Cuadrilla asignada</label>
                   <select className="input-field" required value={form.cuadrillaId}
@@ -372,14 +394,12 @@ export default function UsuariosPage() {
                     ))}
                   </select>
                 </div>
-
                 {form.provincia && (
                   <div style={{ padding: '10px 14px', background: 'rgba(139,92,246,0.08)', border: '1px solid rgba(139,92,246,0.2)', borderRadius: 10 }}>
                     <p style={{ fontSize: 12, color: '#a78bfa' }}>📍 Provincia: <strong>{form.provincia}</strong></p>
                   </div>
                 )}
-
-                <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
+                <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
                   <button type="button" onClick={() => { setShowModal(false); resetForm(); }}
                     style={{ flex: 1, padding: '11px 16px', borderRadius: 10, border: '1px solid rgba(100,116,139,0.3)', background: 'transparent', color: '#94a3b8', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
                     Cancelar

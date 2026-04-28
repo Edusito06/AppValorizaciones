@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import AdminSidebar from '@/components/AdminSidebar';
@@ -7,12 +7,16 @@ import AdminSidebar from '@/components/AdminSidebar';
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { user, userData, loading } = useAuth();
   const router = useRouter();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (loading) return;
     if (!user) { router.replace('/login'); return; }
     if (userData && userData.rol !== 'superadmin') router.replace('/supervisor/dashboard');
   }, [user, userData, loading, router]);
+
+  // Cierra sidebar al cambiar de ruta en móvil
+  useEffect(() => { setSidebarOpen(false); }, []);
 
   if (loading || !userData) {
     return (
@@ -24,8 +28,30 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div style={{ display:'flex', minHeight:'100vh' }}>
-      <AdminSidebar />
-      <div className="main-content">{children}</div>
+      {/* Overlay móvil */}
+      {sidebarOpen && (
+        <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />
+      )}
+
+      <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+      <div className="main-content" style={{ flex: 1, minWidth: 0 }}>
+        {/* Topbar móvil */}
+        <div className="mobile-topbar">
+          <button className="hamburger-btn" onClick={() => setSidebarOpen(true)}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
+          <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+            <div style={{ width:28,height:28,borderRadius:8,background:'linear-gradient(135deg,#7c3aed,#8b5cf6)',display:'flex',alignItems:'center',justifyContent:'center' }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            <span style={{ fontSize:14,fontWeight:700,color:'#e2e8f0' }}>CIEEC Admin</span>
+          </div>
+        </div>
+        {children}
+      </div>
     </div>
   );
 }
