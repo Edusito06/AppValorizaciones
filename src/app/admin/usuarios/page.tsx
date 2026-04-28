@@ -342,9 +342,9 @@ export default function UsuariosPage() {
                       <td style={{ padding: '14px 16px' }}><Badge activo={sup.activo} /></td>
                       <td style={{ padding: '14px 16px' }}>
                         <div style={{ display: 'flex', gap: 8 }}>
-                          <button onClick={() => selected?.uid === sup.uid ? setSelected(null) : abrirDetalle(sup)}
-                            style={{ padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer', background: selected?.uid === sup.uid ? 'rgba(139,92,246,0.2)' : 'rgba(139,92,246,0.08)', border: '1px solid rgba(139,92,246,0.3)', color: '#a78bfa' }}>
-                            {selected?.uid === sup.uid ? 'Cerrar' : 'Ver detalle'}
+                          <button onClick={() => abrirDetalle(sup)}
+                            style={{ padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer', background: 'rgba(139,92,246,0.08)', border: '1px solid rgba(139,92,246,0.3)', color: '#a78bfa' }}>
+                            Ver detalle
                           </button>
                           <button onClick={() => handleToggleActivo(sup)}
                             style={{ padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer', background: sup.activo !== false ? 'rgba(239,68,68,0.08)' : 'rgba(16,185,129,0.08)', border: `1px solid ${sup.activo !== false ? 'rgba(239,68,68,0.3)' : 'rgba(16,185,129,0.3)'}`, color: sup.activo !== false ? '#f87171' : '#10b981' }}>
@@ -360,26 +360,19 @@ export default function UsuariosPage() {
           )}
         </div>
 
-        {/* Panel detalle desktop */}
-        {!isMobile && selected && (
-          <div className="card-gradient fade-in" style={{ width: 300, flexShrink: 0, padding: 24, position: 'sticky', top: 32, alignSelf: 'flex-start', maxHeight: 'calc(100vh - 64px)', overflowY: 'auto' }}>
-            <DetalleContent sup={selected} />
-          </div>
-        )}
       </div>
 
-      {/* ── Modal detalle móvil (bottom-sheet) ── */}
-      {isMobile && showDetalle && selected && (
+      {/* ── Modal detalle (móvil y desktop) ── */}
+      {showDetalle && selected && (
         <div
           onClick={() => { setShowDetalle(false); setSelected(null); }}
-          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9998, background: 'rgba(0,0,0,0.75)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}
+          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9998, background: 'rgba(0,0,0,0.75)', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
           <div
             onClick={e => e.stopPropagation()}
-            className="fade-in"
-            style={{ background: 'linear-gradient(135deg,rgba(13,31,60,0.99) 0%,rgba(5,16,31,0.99) 100%)', border: '1px solid rgba(59,130,246,0.18)', borderRadius: '20px 20px 0 0', maxHeight: '88vh', overflowY: 'auto', padding: 24 }}
+            className="card-gradient fade-in"
+            style={{ width: '100%', maxWidth: 420, margin: 16, maxHeight: 'calc(100vh - 32px)', overflowY: 'auto', padding: isMobile ? 20 : 28 }}
           >
-            <div style={{ width: 36, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.15)', margin: '0 auto 20px' }} />
             <DetalleContent sup={selected} />
           </div>
         </div>
