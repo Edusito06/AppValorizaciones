@@ -318,14 +318,16 @@ export async function eliminarItemTL(itemId: string, tlId: string, subtotal: num
   await batch.commit();
 }
 
-// ─── ACTIVIDAD GLOBAL (1 query en vez de N) ───────────────────────────────────
+// ─── ACTIVIDAD GLOBAL (items_om + items_tl) ───────────────────────────────────
 export async function getActividadResumenGlobal(): Promise<
   Record<string, { hoy: number; ultimaFecha: string | null }>
 > {
   const hoy = new Date().toISOString().split('T')[0];
-  const snap = await getDocs(collection(db, 'items_om'));
   const result: Record<string, { hoy: number; ultimaFecha: string | null }> = {};
-  snap.docs.forEach(d => {
+
+  // Contar items de OMs
+  const snapOM = await getDocs(collection(db, 'items_om'));
+  snapOM.docs.forEach(d => {
     const data = d.data();
     const cid: string = data.cuadrilla_id;
     const fecha: string = data.fecha_ejecucion;
@@ -335,6 +337,20 @@ export async function getActividadResumenGlobal(): Promise<
       result[cid].ultimaFecha = fecha;
     }
   });
+
+  // Contar items de Trabajos Libres (también son actividad)
+  const snapTL = await getDocs(collection(db, 'items_tl'));
+  snapTL.docs.forEach(d => {
+    const data = d.data();
+    const cid: string = data.cuadrilla_id;
+    const fecha: string = data.fecha_ejecucion;
+    if (!result[cid]) result[cid] = { hoy: 0, ultimaFecha: null };
+    if (fecha === hoy) result[cid].hoy++;
+    if (!result[cid].ultimaFecha || fecha > result[cid].ultimaFecha) {
+      result[cid].ultimaFecha = fecha;
+    }
+  });
+
   return result;
 }
 
